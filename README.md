@@ -1,5 +1,6 @@
 # Lofter
 
+## Developing
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
@@ -11,6 +12,10 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Deploying
+```
+git push heroku main
+```
 ## Learn more
 
   * Official website: https://www.phoenixframework.org/
