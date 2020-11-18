@@ -1,1 +1,5 @@
-<%= timely_greeting() %>
+<h1 class='text-xl'><%= timely_greeting() %></h1>
+
+<span class="button">
+Fresh button
+</span>
