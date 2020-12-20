@@ -7,21 +7,25 @@
     </div>
   <% end %>
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+  <div class="input-group string">
+    <%= label f, :email %>
+    <%= email_input f, :email, required: true %>
+  </div>
 
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
+  <div class="input-group string">
+    <%= label f, :password %>
+    <%= password_input f, :password, required: true %>
+  </div>
 
-  <%= label f, :remember_me, "Keep me logged in for 60 days" %>
-  <%= checkbox f, :remember_me %>
+  <div class="input-group boolean">
+    <%= checkbox f, :remember_me %>
+    <%= label f, :remember_me, "Keep me logged in for 60 days" %>
+  </div>
 
   <div>
-    <%= submit "Log in" %>
+    <%= submit "Log in", class: 'button button-primary' %>
   </div>
 <% end %>
 
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>
+<p class="text-right">Don't have an account? <%= link "Register", to: Routes.user_registration_path(@conn, :new) %></p>
+<p class="text-right"><%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %></p>

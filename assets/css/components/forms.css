@@ -1,0 +1,59 @@
+.input-group.string {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input-group.boolean {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  margin-bottom: 1rem;
+}
+
+input[type=password] {
+  @apply tracking-widest;
+}
+
+.input-group label {
+  @apply text-sm text-gray-900 cursor-pointer;
+}
+
+.input-group.string input {
+  @apply px-2 py-1 border rounded;
+}
+
+.input-group.boolean input {
+  @apply sr-only;
+}
+
+.input-group.boolean label {
+  line-height: 1;
+  padding-left: 1.5rem;
+  flex: 1;
+}
+
+.input-group.boolean label::before,
+.input-group.boolean label::after {
+  content: '';
+  display: block; position: absolute;
+  top: 0; left: 1px;
+  width: 1rem; height: 1rem;
+}
+
+.input-group.boolean label::before {
+  @apply border rounded;
+}
+
+.input-group.boolean label::after {
+  @apply rounded;
+}
+
+.input-group.boolean input:checked + label::after {
+  @apply text-green-500 bg-current;
+
+  mask-image: url('../static/images/icons/check.svg');
+  mask-size: 85%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}

@@ -21,7 +21,6 @@ defmodule LofterWeb.Router do
     pipe_through :browser
 
     get "/", HomeController, :index
-    # live "/", PageLive, :index
   end
 
   # Other scopes may use custom stacks.
