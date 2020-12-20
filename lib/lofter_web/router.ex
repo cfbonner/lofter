@@ -1,6 +1,8 @@
 defmodule LofterWeb.Router do
   use LofterWeb, :router
 
+  import LofterWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule LofterWeb.Router do
     plug :put_root_layout, {LofterWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
@@ -40,5 +43,37 @@ defmodule LofterWeb.Router do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: LofterWeb.Telemetry
     end
+  end
+
+  ## Authentication routes
+
+  scope "/", LofterWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    get "/user/register", UserRegistrationController, :new
+    post "/user/register", UserRegistrationController, :create
+    get "/user/log_in", UserSessionController, :new
+    post "/user/log_in", UserSessionController, :create
+    get "/user/reset_password", UserResetPasswordController, :new
+    post "/user/reset_password", UserResetPasswordController, :create
+    get "/user/reset_password/:token", UserResetPasswordController, :edit
+    put "/user/reset_password/:token", UserResetPasswordController, :update
+  end
+
+  scope "/", LofterWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/user/settings", UserSettingsController, :edit
+    put "/user/settings", UserSettingsController, :update
+    get "/user/settings/confirm_email/:token", UserSettingsController, :confirm_email
+  end
+
+  scope "/", LofterWeb do
+    pipe_through [:browser]
+
+    delete "/user/log_out", UserSessionController, :delete
+    get "/user/confirm", UserConfirmationController, :new
+    post "/user/confirm", UserConfirmationController, :create
+    get "/user/confirm/:token", UserConfirmationController, :confirm
   end
 end
