@@ -1,7 +1,8 @@
 .button {
-  @apply px-4 py-2 w-full rounded font-semibold bg-gray-800 text-white;
+  @apply px-4 py-2 w-full rounded font-semibold bg-gray-800 text-white
+  focus:ring-2 focus:ring-green-300;
 }
 
 .button-primary {
-  @apply bg-green-500;
+  @apply bg-green-800;
 }

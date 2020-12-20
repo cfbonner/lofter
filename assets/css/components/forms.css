@@ -12,7 +12,7 @@
 }
 
 input[type=password] {
-  @apply tracking-widest;
+  @apply tracking-wide;
 }
 
 .input-group label {
@@ -20,7 +20,7 @@ input[type=password] {
 }
 
 .input-group.string input {
-  @apply px-2 py-1 border rounded;
+  @apply px-2 py-1 border border-gray-500 rounded focus:outline-none focus:ring-2 focus:ring-green-400;
 }
 
 .input-group.boolean input {
@@ -28,21 +28,26 @@ input[type=password] {
 }
 
 .input-group.boolean label {
+  @apply pl-8 h-5;
   line-height: 1;
-  padding-left: 1.5rem;
   flex: 1;
 }
 
 .input-group.boolean label::before,
 .input-group.boolean label::after {
+  @apply w-5 h-5;
+
   content: '';
   display: block; position: absolute;
   top: 0; left: 1px;
-  width: 1rem; height: 1rem;
 }
 
 .input-group.boolean label::before {
-  @apply border rounded;
+  @apply border border-gray-500 rounded;
+}
+
+.input-group.boolean:focus-within label::before {
+  @apply ring-2 ring-green-400;
 }
 
 .input-group.boolean label::after {
@@ -50,7 +55,7 @@ input[type=password] {
 }
 
 .input-group.boolean input:checked + label::after {
-  @apply text-green-500 bg-current;
+  @apply text-green-700 bg-current;
 
   mask-image: url('../static/images/icons/check.svg');
   mask-size: 85%;

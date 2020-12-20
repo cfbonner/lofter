@@ -1,4 +1,5 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+const defaultTheme = require("tailwindcss/defaultTheme")
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   future: {
@@ -16,6 +17,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Source Sans Pro", ...defaultTheme.fontFamily.sans]
+      },
+      colors: {
+	green: colors.emerald,
+	gray: colors.warmGray,
       }
     },
   },
