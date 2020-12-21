@@ -62,8 +62,8 @@ defmodule LofterWeb.Router do
   scope "/", LofterWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/game/new", GameSettingsController, :new
-    post "/game/create", GameSettingsController, :create
+    get "/game/new", GameController, :new
+    post "/game/create", GameController, :create
     get "/game/edit", GameController, :edit
 
     get "/user/settings", UserSettingsController, :edit

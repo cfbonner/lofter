@@ -1,15 +1,18 @@
 <h1>New game</h1>
 
-<%= form_for :game_settings, Routes.game_settings_path(@conn, :create), fn f -> %>
+<%= form_for @changeset, Routes.game_path(@conn, :create), fn f -> %>
 
-  <%= if assigns[:errors] do %>
+
+  <%= if @changeset.action do %>
     <div class="block bg-red-100 px-2 py-2">
-      <%= @errors %>
+      <p>You've got to fix something</p>
     </div>
   <% end %>
 
   <div class="input-group string">
+    <%= hidden_input f, :course, value: "" %>
     <%= label f, :course %>
+    <%= error_tag f, :course %>
     <div>
       <%= label f, "course_bruntsfield", class: "block" do %>
         <%= radio_button f, :course, "bruntsfield" %>
@@ -22,20 +25,22 @@
       <% end %>
     </div>
 
-    <%= label f, :holes %>
+    <%= hidden_input f, :length, value: "" %>
+    <%= label f, :length %>
+    <%= error_tag f, :length %>
     <div>
-      <%= label f, "holes_9", class: "block" do %>
-        <%= radio_button f, :holes, "9" %>
+      <%= label f, "length_9", class: "block" do %>
+        <%= radio_button f, :length, "9" %>
         <span>9</span>
       <% end %>
 
-      <%= label f, "holes_18", class: "block" do %>
-        <%= radio_button f, :holes, "18" %>
+      <%= label f, "length_18", class: "block" do %>
+        <%= radio_button f, :length, "18" %>
         <span>18</span>
       <% end %>
 
-      <%= label f, "holes_36", class: "block" do %>
-        <%= radio_button f, :holes, "36" %>
+      <%= label f, "length_36", class: "block" do %>
+        <%= radio_button f, :length, "36" %>
         <span>36</span>
       <% end %>
     </div>

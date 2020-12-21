@@ -1,3 +1,3 @@
 <h1>Lofter</h1>
 <h2><%= timely_greeting() %></h2>
-<%= link "New game", to: Routes.game_settings_path(@conn, :new), class: "button button-primary" %>
+<%= link "New game", to: Routes.game_path(@conn, :new), class: "button button-primary" %>
