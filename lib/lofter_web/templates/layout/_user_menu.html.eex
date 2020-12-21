@@ -1,4 +1,5 @@
 <ul>
+  <li><%= link "Home", to: Routes.home_path(@conn, :index) %></li>
 <%= if @current_user do %>
   <li><%= @current_user.email %></li>
   <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>

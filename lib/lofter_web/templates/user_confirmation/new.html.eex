@@ -1,4 +1,4 @@
-<h1 class="">Resend confirmation instructions</h1>
+<h1>Resend confirmation instructions</h1>
 
 <%= form_for :user, Routes.user_confirmation_path(@conn, :create), fn f -> %>
   <div class="input-group string">

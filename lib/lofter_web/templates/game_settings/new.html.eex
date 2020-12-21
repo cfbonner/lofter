@@ -1,0 +1,47 @@
+<h1>New game</h1>
+
+<%= form_for :game_settings, Routes.game_settings_path(@conn, :create), fn f -> %>
+
+  <%= if assigns[:errors] do %>
+    <div class="block bg-red-100 px-2 py-2">
+      <%= @errors %>
+    </div>
+  <% end %>
+
+  <div class="input-group string">
+    <%= label f, :course %>
+    <div>
+      <%= label f, "course_bruntsfield", class: "block" do %>
+        <%= radio_button f, :course, "bruntsfield" %>
+        <span>Bruntsfield</span>
+      <% end %>
+
+      <%= label f, "course_leith", class: "block" do %>
+        <%= radio_button f, :course, "leith" %>
+        <span>Leith</span>
+      <% end %>
+    </div>
+
+    <%= label f, :holes %>
+    <div>
+      <%= label f, "holes_9", class: "block" do %>
+        <%= radio_button f, :holes, "9" %>
+        <span>9</span>
+      <% end %>
+
+      <%= label f, "holes_18", class: "block" do %>
+        <%= radio_button f, :holes, "18" %>
+        <span>18</span>
+      <% end %>
+
+      <%= label f, "holes_36", class: "block" do %>
+        <%= radio_button f, :holes, "36" %>
+        <span>36</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <%= submit "Start game", class: 'button button-primary' %>
+  </div>
+<% end %>
