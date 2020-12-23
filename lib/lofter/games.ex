@@ -4,7 +4,7 @@ defmodule Lofter.Games do
   """
 
   alias Lofter.Repo
-  alias Lofter.Games.Match
+  alias Lofter.Games.{Match, Hole}
 
   def setup_match(%Match{} = match, attrs \\ %{}) do
     Match.settings_changeset(match, attrs)
@@ -20,6 +20,6 @@ defmodule Lofter.Games do
   def get_match!(id) do
     Match
     |> Repo.get(id)
-    |> Repo.preload(:holes)
+    |> Repo.preload(holes: Hole.position_query)
   end
 end
