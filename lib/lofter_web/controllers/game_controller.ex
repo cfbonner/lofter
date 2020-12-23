@@ -9,14 +9,15 @@ defmodule LofterWeb.GameController do
 
   def create(conn, %{"match" => match_params}) do
     case Games.start_match(match_params) do
-      {:ok, _match} ->
-        redirect(conn, to: Routes.game_path(conn, :edit))
+      {:ok, match} ->
+        redirect(conn, to: Routes.game_path(conn, :edit, match))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
 
-  def edit(conn, _params) do
-    render(conn, "edit.html")
+  def edit(conn, %{"id" => id}) do
+    game = Games.get_match!(id)
+    render(conn, "edit.html", game: game)
   end
 end

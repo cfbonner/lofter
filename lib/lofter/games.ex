@@ -13,6 +13,13 @@ defmodule Lofter.Games do
   def start_match(attrs \\ %{}) do
     %Match{}
     |> Match.settings_changeset(attrs)
+    |> Match.build_holes(attrs["length"])
     |> Repo.insert()
+  end
+
+  def get_match!(id) do
+    Match
+    |> Repo.get(id)
+    |> Repo.preload(:holes)
   end
 end

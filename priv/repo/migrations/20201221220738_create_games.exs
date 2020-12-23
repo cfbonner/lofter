@@ -9,8 +9,9 @@ defmodule Lofter.Repo.Migrations.CreateGames do
     end
 
     create table "holes" do
-      add :par, :integer
-      add :strokes, :integer
+      add :par,      :integer
+      add :strokes,  :integer
+      add :position, :integer
       add :match_id, references(:matches)
       timestamps()
     end

@@ -1,7 +1,10 @@
 <h1 class="sr-only">Play game</h1>
 
 <div>
-  <p>Hole 1</p>
-  <p>Hole 2</p>
-  <p>Hole 3</p>
+  <%= for hole <- @game.holes do %>
+    <div class="block mb-2 rounded bg-gray-100">
+      <p class="font-bold">Hole <%= hole.position %></p>
+      <p>Par <strong class="font-bold"><%= hole.par %></strong></p>
+    </div>
+  <% end %>
 </div>

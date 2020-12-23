@@ -15,4 +15,20 @@ defmodule Lofter.Games.Match do
     |> cast(attrs, [:course, :length])
     |> validate_required([:course, :length])
   end
+
+  def build_holes(match, length) do
+    {amount, _} = Integer.parse(length)
+    holes_attrs = %{ "holes" => generate_holes([], amount) }
+
+    match
+    |> cast(holes_attrs, [])
+    |> cast_assoc(:holes, with: &Lofter.Games.Hole.initial_changeset/2)
+  end
+
+  defp generate_holes(holes, 0) do
+    holes
+  end
+  defp generate_holes(holes, amount) do
+    generate_holes([%{position: amount} | holes], amount - 1)
+  end
 end
