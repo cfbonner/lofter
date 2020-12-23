@@ -18,7 +18,15 @@ defmodule Lofter.Games.Hole do
     |> validate_required([:position])
   end
 
+  def strokes_changeset(hole, attrs \\ %{}) do
+    hole
+    |> cast(attrs, [:strokes])
+    |> validate_required([:strokes])
+  end
+
   def position_query do
-    from h in __MODULE__, order_by: h.position
+    from h in __MODULE__, 
+      order_by: h.position, 
+      select: [:par, :strokes, :position, :id]
   end
 end

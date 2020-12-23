@@ -22,4 +22,14 @@ defmodule Lofter.Games do
     |> Repo.get(id)
     |> Repo.preload(holes: Hole.position_query)
   end
+
+  def update_match(match_id, hole_id, hole_strokes) do
+    attrs = %{ strokes: hole_strokes }
+    Hole
+    |> Repo.get(hole_id)
+    |> Hole.strokes_changeset(attrs)
+    |> Repo.update()
+
+    get_match!(match_id)
+  end
 end

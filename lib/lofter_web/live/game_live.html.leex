@@ -1,0 +1,18 @@
+<h1 class="sr-only">Play game</h1>
+
+<div>
+  <%= for hole <- @match.holes do %>
+    <a href="#" 
+       phx-click="set_score"
+       phx-value-hole-id="<%= hole.id %>"
+       class="<%= if hole.strokes do 'bg-green-200' end %> flex w-full justify-between p-2 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300 focus:border-transparent focus:ring-2 focus:ring-green-300">
+      <div>
+        <p class="font-bold">Hole <%= hole.position %></p>
+        <p>Par <strong class="font-bold"><%= hole.par %></strong></p>
+      </div>
+      <div>
+        <p class="text-3xl font-bold"><%= hole.strokes %></p>
+      </div>
+    </a>
+  <% end %>
+</div>

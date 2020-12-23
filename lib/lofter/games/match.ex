@@ -17,12 +17,14 @@ defmodule Lofter.Games.Match do
   end
 
   def build_holes(match, length) do
-    {amount, _} = Integer.parse(length)
-    holes_attrs = %{ "holes" => generate_holes([], amount) }
-
-    match
-    |> cast(holes_attrs, [])
-    |> cast_assoc(:holes, with: &Lofter.Games.Hole.initial_changeset/2)
+    case Integer.parse(length) do
+      {amount, _} ->
+        holes_attrs = %{ "holes" => generate_holes([], amount) }
+        match
+        |> cast(holes_attrs, [])
+        |> cast_assoc(:holes, with: &Lofter.Games.Hole.initial_changeset/2)
+      :error  -> match
+    end
   end
 
   defp generate_holes(holes, 0) do

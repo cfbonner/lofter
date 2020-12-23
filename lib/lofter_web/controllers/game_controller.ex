@@ -1,4 +1,6 @@
 defmodule LofterWeb.GameController do
+  import Phoenix.LiveView.Controller
+
   use LofterWeb, :controller
   alias Lofter.Games
 
@@ -17,7 +19,8 @@ defmodule LofterWeb.GameController do
   end
 
   def edit(conn, %{"id" => id}) do
-    game = Games.get_match!(id)
-    render(conn, "edit.html", game: game)
+    live_render(conn, Lofter.GameLive, session: %{
+      "game_id" => id
+    })
   end
 end
