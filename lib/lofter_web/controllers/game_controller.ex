@@ -19,7 +19,7 @@ defmodule LofterWeb.GameController do
   end
 
   def edit(conn, %{"id" => id}) do
-    live_render(conn, Lofter.GameLive, session: %{
+    live_render(conn, LofterWeb.GameLive, session: %{
       "game_id" => id
     })
   end

@@ -32,4 +32,9 @@ defmodule Lofter.Games do
 
     get_match!(match_id)
   end
+
+  def get_hole!(id) do
+    Hole
+    |> Repo.get(id)
+  end
 end

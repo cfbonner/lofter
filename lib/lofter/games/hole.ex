@@ -6,7 +6,7 @@ defmodule Lofter.Games.Hole do
   schema "holes" do
     belongs_to :match, Lofter.Games.Match
     field :par, :integer, default: 3
-    field :strokes, :integer
+    field :strokes, :integer, default: 0
     field :position, :integer
 
     timestamps()
