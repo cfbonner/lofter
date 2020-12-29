@@ -1,13 +1,18 @@
-<div 
-  class="fixed right-0 left-0 bottom-0 px-2 pt-4 pb-8 border-t-2 border-gray-200 bg-gray-100"
-  >
+<div class="<%= if @open do 'drawer' else 'drawer closed' end %>">
+   <div 
+     phx-click="toggle_drawer"
+     class="drawer-handle"
+    >
+    <span class="text-sm">Handle</span>
+  </div>
   <h3 class="text-2xl">Hole <%= @current.position %></h3>
   <div>
     <h4 class="text-sm font-bold">Select score</h4>
     <%= f = form_for :hole, "#", [phx_change: :update_hole] %>
       <%= hidden_input f, :strokes, value: "" %>
       <div
-        class="max-h-44 overflow-y-scroll divide-y-2 divide-gray-200"
+        class="
+        overflow-y-scroll divide-y-2 divide-gray-200"
       >
         <%= for strokes <- (1..7) do %>
           <%= live_component(

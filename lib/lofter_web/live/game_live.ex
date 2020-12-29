@@ -11,12 +11,17 @@ defmodule LofterWeb.GameLive do
     {:ok, socket 
       |> assign(:match, match) 
       |> assign(:current, current)
+      |> assign(:open, false)
     }
   end
 
   def handle_event("set_current", %{"hole-id" => hole_id}, socket) do
     new_current = Lofter.Games.get_hole!(hole_id)
-    {:noreply, assign(socket, :current, new_current)}
+    {:noreply, 
+      socket
+      |> assign(:current, new_current)
+      |> assign(:open, true)
+    }
   end
 
   def handle_event(
@@ -48,4 +53,9 @@ defmodule LofterWeb.GameLive do
        |> assign(:current, updated_current)
     }
   end
+
+  def handle_event("toggle_drawer", _value, socket) do
+    open = !socket.assigns.open
+    {:noreply, assign(socket, :open, open)}
+  end 
 end
