@@ -27,6 +27,7 @@ defmodule LofterWeb.StrokeOptionComponent do
 
   defp humanize_strokes(stroke) do
     case stroke do
+      0 -> 'Reset'
       1 -> 'Ace (1)'
       2 -> 'Birdie (2)'
       3 -> 'Par (3)'

@@ -24,27 +24,47 @@ defmodule LofterWeb.GameLive do
     }
   end
 
+  def handle_event("add_another", _value, socket) do
+    {:ok, updated} = Lofter.Games.add_hole!(socket.assigns.match)
+    match = Lofter.Games.get_match!(socket.assigns.match.id)
+    {:noreply, 
+      socket
+      |> assign(:match, match)
+      |> assign(:current, List.last(match.holes))
+      |> assign(:open, true)
+    }
+  end
+
+  def handle_event("next_hole", _value, socket) do
+    current_match = socket.assigns.match
+    current_hole = socket.assigns.current
+    new_current = Lofter.Games.next_hole!(
+      current_match.id,
+      current_hole.position,
+      current_match.length
+    )
+
+    {:noreply, assign(socket, :current, new_current)}
+  end
+
+  def handle_event("previous_hole", _value, socket) do
+    current_match = socket.assigns.match
+    current_hole = socket.assigns.current
+    new_current = Lofter.Games.prev_hole!(
+      current_match.id,
+      current_hole.position,
+      current_match.length
+    )
+
+    {:noreply, assign(socket, :current, new_current)}
+  end
+
   def handle_event(
         "update_hole", 
         %{"hole" => %{"strokes" => strokes}}, 
         socket
       ) do
     updated_match = Lofter.Games.update_match(socket.assigns.match.id, socket.assigns.current.id, strokes)
-    updated_current = Lofter.Games.get_hole!(socket.assigns.current.id)
-    {
-      :noreply, 
-      socket 
-       |> assign(:match, updated_match) 
-       |> assign(:current, updated_current)
-    }
-  end
-
-  def handle_event(
-        "update_hole", 
-        %{"clear" => "true"}, 
-        socket
-      ) do
-    updated_match = Lofter.Games.update_match(socket.assigns.match.id, socket.assigns.current.id, 0)
     updated_current = Lofter.Games.get_hole!(socket.assigns.current.id)
     {
       :noreply, 

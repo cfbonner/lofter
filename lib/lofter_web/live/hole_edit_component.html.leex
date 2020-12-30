@@ -1,13 +1,26 @@
 <div class="<%= if @open do 'drawer' else 'drawer closed' end %>">
-   <div 
+   <button 
      phx-click="toggle_drawer"
      class="drawer-handle"
     >
     <span class="text-sm">Handle</span>
+  </button>
+  <div class="flex items-end justify-between">
+    <h3 class="text-2xl">Hole <%= @current.position %></h3>
+    <div>
+      <a 
+        phx-click="previous_hole" 
+        href="#" 
+        class="text-xs font-bold"
+        >Previous</a> | 
+      <a 
+        phx-click="next_hole" 
+        href="#" 
+        class="text-xs font-bold"
+        >Next</a>
+    </div>
   </div>
-  <h3 class="text-2xl">Hole <%= @current.position %></h3>
   <div>
-    <h4 class="text-sm font-bold">Select score</h4>
     <%= f = form_for :hole, "#", [phx_change: :update_hole] %>
       <%= hidden_input f, :strokes, value: "" %>
       <div
@@ -22,18 +35,13 @@
               )
           %>
         <% end %>
+        <%= live_component(
+              @socket, 
+              LofterWeb.StrokeOptionComponent, 
+              [form: f, strokes: 0, current: @current]
+            )
+        %>
       </div>
-      <input 
-        phx-click="update_hole"
-        type="reset"
-        phx-value-clear="true"
-        <%= if @current.strokes == 0 do %> 
-          disabled="true" 
-        <% end %>
-        class="cursor-pointer font-bold text-pink-500
-               disabled:text-gray-200 disabled:cursor-not-allowed
-               "
-      />
     </form>
   </div>
 </div>

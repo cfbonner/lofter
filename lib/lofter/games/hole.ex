@@ -26,7 +26,11 @@ defmodule Lofter.Games.Hole do
 
   def position_query do
     from h in __MODULE__, 
-      order_by: h.position, 
-      select: [:par, :strokes, :position, :id]
+      order_by: h.position
+  end
+
+  def find_by_position_query(game_id, position) do
+    from h in __MODULE__, 
+      where: h.match_id == ^game_id and h.position == ^position
   end
 end
