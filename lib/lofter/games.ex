@@ -13,7 +13,7 @@ defmodule Lofter.Games do
   def start_match(attrs \\ %{}) do
     %Match{}
     |> Match.settings_changeset(attrs)
-    |> Match.build_holes(attrs["length"])
+    |> Match.build_players_and_holes(attrs["players"], attrs["length"])
     |> Repo.insert()
   end
 

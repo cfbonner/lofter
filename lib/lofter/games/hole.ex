@@ -4,7 +4,7 @@ defmodule Lofter.Games.Hole do
   import Ecto.Query
 
   schema "holes" do
-    belongs_to :match, Lofter.Games.Match
+    belongs_to :match_player, Lofter.Games.MatchPlayer
     field :par, :integer, default: 3
     field :strokes, :integer, default: 0
     field :position, :integer

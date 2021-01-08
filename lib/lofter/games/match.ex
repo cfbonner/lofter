@@ -3,7 +3,7 @@ defmodule Lofter.Games.Match do
   import Ecto.Changeset
 
   schema "matches" do
-    has_many :holes, Lofter.Games.Hole
+    has_many :match_players, Lofter.Games.MatchPlayer
     field :course, :string
     field :length, :integer
 
@@ -16,21 +16,30 @@ defmodule Lofter.Games.Match do
     |> validate_required([:course, :length])
   end
 
-  def build_holes(match, length) do
-    case Integer.parse(length) do
+
+  def build_players_and_holes(match, player_count, hole_count) do
+    match
+    |> cast(%{"match_players" => generate_players(player_count, hole_count)}, [])
+    |> cast_assoc(
+         :match_players, with: &Lofter.Games.MatchPlayer.initial_changeset/2
+       )
+  end
+
+  defp generate_players(player_count, hole_count) do
+    case Integer.parse(player_count) do
       {amount, _} ->
-        holes_attrs = %{ "holes" => generate_holes([], amount) }
-        match
-        |> cast(holes_attrs, [])
-        |> cast_assoc(:holes, with: &Lofter.Games.Hole.initial_changeset/2)
-      :error  -> match
+        Enum.map(
+          1..amount, fn n -> %{position: n, holes: generate_holes(hole_count)} end
+        )
+      :error -> %{}
     end
   end
 
-  defp generate_holes(holes, 0) do
-    holes
-  end
-  defp generate_holes(holes, amount) do
-    generate_holes([%{position: amount} | holes], amount - 1)
+  defp generate_holes(hole_count) do
+    case Integer.parse(hole_count) do
+      {amount, _} ->
+        Enum.map(1..amount, fn n -> %{position: n} end)
+      :error -> %{}
+    end
   end
 end
