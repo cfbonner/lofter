@@ -38,5 +38,4 @@ defmodule LofterWeb.StrokeOptionComponent do
       _ -> stroke
     end
   end
-
 end

@@ -24,13 +24,13 @@ defmodule Lofter.Games.Hole do
     |> validate_required([:strokes])
   end
 
-  def position_query do
-    from h in __MODULE__, 
+  def order_by_position_query do
+    from h in __MODULE__,
       order_by: h.position
   end
 
   def find_by_position_query(game_id, position) do
-    from h in __MODULE__, 
+    from h in __MODULE__,
       where: h.match_id == ^game_id and h.position == ^position
   end
 end

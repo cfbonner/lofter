@@ -4,7 +4,7 @@ defmodule Lofter.Games do
   """
 
   alias Lofter.Repo
-  alias Lofter.Games.{Match, Hole}
+  alias Lofter.Games.{Match, MatchPlayer, Hole}
 
   def setup_match(%Match{} = match, attrs \\ %{}) do
     Match.settings_changeset(match, attrs)
@@ -20,11 +20,12 @@ defmodule Lofter.Games do
   def get_match!(id) do
     Match
     |> Repo.get(id)
-    |> Repo.preload(holes: Hole.position_query)
+    |> Repo.preload(match_players: MatchPlayer.order_by_position_query())
   end
 
   def update_match(match_id, hole_id, hole_strokes) do
-    attrs = %{ strokes: hole_strokes }
+    attrs = %{strokes: hole_strokes}
+
     Hole
     |> Repo.get(hole_id)
     |> Hole.strokes_changeset(attrs)
@@ -34,31 +35,30 @@ defmodule Lofter.Games do
   end
 
   def next_hole!(game_id, current_hole_position, holes_count) do
-    next = Integer.mod(
-      current_hole_position + 1, 
-      holes_count
-    )
+    next =
+      Integer.mod(
+        current_hole_position + 1,
+        holes_count
+      )
 
-    next_hole_position = case next do
-      0 -> holes_count
-      _ -> next
-    end
+    next_hole_position =
+      case next do
+        0 -> holes_count
+        _ -> next
+      end
 
-    Repo.one(
-      Hole.find_by_position_query(game_id, next_hole_position)
-    )
+    Repo.one(Hole.find_by_position_query(game_id, next_hole_position))
   end
 
   def prev_hole!(game_id, current_hole_position, holes_count) do
-    next_hole_position = if current_hole_position - 1 == 0 do
-      holes_count
-    else
-      current_hole_position - 1
-    end
+    next_hole_position =
+      if current_hole_position - 1 == 0 do
+        holes_count
+      else
+        current_hole_position - 1
+      end
 
-    Repo.one(
-      Hole.find_by_position_query(game_id, next_hole_position)
-    )
+    Repo.one(Hole.find_by_position_query(game_id, next_hole_position))
   end
 
   def get_hole!(id) do

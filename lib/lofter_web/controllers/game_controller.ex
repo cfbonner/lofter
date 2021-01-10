@@ -13,14 +13,17 @@ defmodule LofterWeb.GameController do
     case Games.start_match(match_params) do
       {:ok, match} ->
         redirect(conn, to: Routes.game_path(conn, :edit, match))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
 
   def edit(conn, %{"id" => id}) do
-    live_render(conn, LofterWeb.GameLive, session: %{
-      "game_id" => id
-    })
+    live_render(conn, LofterWeb.GameLive,
+      session: %{
+        "game_id" => id
+      }
+    )
   end
 end

@@ -25,6 +25,26 @@
       <% end %>
     </div>
 
+    <%= hidden_input f, :players, value: "" %>
+    <%= label f, :players %>
+    <%= error_tag f, :players %>
+    <div>
+      <%= label f, "players_1", class: "block" do %>
+        <%= radio_button f, :players, "1" %>
+        <span>1</span>
+      <% end %>
+
+      <%= label f, "players_2", class: "block" do %>
+        <%= radio_button f, :players, "2" %>
+        <span>2</span>
+      <% end %>
+
+      <%= label f, "players_3", class: "block" do %>
+        <%= radio_button f, :players, "3" %>
+        <span>3</span>
+      <% end %>
+    </div>
+
     <%= hidden_input f, :length, value: "" %>
     <%= label f, :length %>
     <%= error_tag f, :length %>

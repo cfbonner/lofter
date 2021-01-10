@@ -16,22 +16,25 @@ defmodule Lofter.Games.Match do
     |> validate_required([:course, :length])
   end
 
-
   def build_players_and_holes(match, player_count, hole_count) do
     match
     |> cast(%{"match_players" => generate_players(player_count, hole_count)}, [])
     |> cast_assoc(
-         :match_players, with: &Lofter.Games.MatchPlayer.initial_changeset/2
-       )
+      :match_players,
+      with: &Lofter.Games.MatchPlayer.initial_changeset/2
+    )
   end
 
   defp generate_players(player_count, hole_count) do
     case Integer.parse(player_count) do
       {amount, _} ->
         Enum.map(
-          1..amount, fn n -> %{position: n, holes: generate_holes(hole_count)} end
+          1..amount,
+          fn n -> %{position: n, holes: generate_holes(hole_count)} end
         )
-      :error -> %{}
+
+      :error ->
+        %{}
     end
   end
 
@@ -39,7 +42,9 @@ defmodule Lofter.Games.Match do
     case Integer.parse(hole_count) do
       {amount, _} ->
         Enum.map(1..amount, fn n -> %{position: n} end)
-      :error -> %{}
+
+      :error ->
+        %{}
     end
   end
 end
