@@ -1,0 +1,12 @@
+<form 
+  action="#"
+  >
+  <label for="match_player[name]">Player:</label>
+  <input 
+    phx-blur="update_name"
+    phx-target="<%= @myself %>"
+    type="text" 
+    name="match_player[name]" 
+    value="<%= @match_player.name %>"
+   />
+</form>

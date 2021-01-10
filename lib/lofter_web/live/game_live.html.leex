@@ -4,16 +4,21 @@
   <div
     class="divide-x-0 divide-gray-100 flex mb-2"
     >
-  <%= for player <- @match.match_players do %>
-    <a 
-      href="#" 
-      class="block w-full bg-gray-300 text-center hover:bg-gray-400 
-      <%= if player.id == @match_player.id do 'bg-gray-600 text-white hover:bg-gray-600' end %>"
-    >
-     <%= player.position %>
-    </a>
-  <% end %>
+    <%= for player <- @match.match_players do %>
+      <a 
+        href="#" 
+        phx-click="show_player"
+        phx-value-match-player-id="<%= player.id %>"
+        class="block w-full bg-gray-300 text-center hover:bg-gray-400 
+        <%= if player.id == @match_player.id do 'bg-gray-600 text-white hover:bg-gray-600' end %>"
+      >
+       Player: <%= player.name %>
+      </a>
+    <% end %>
   </div>
+
+  <%= live_component @socket, LofterWeb.MatchPlayerEditComponent, id: "match_player_edit", match_player: @match_player, match_id: @match.id %>
+
   <%= for hole <- @match_player.holes do %>
     <a 
       href="#" 

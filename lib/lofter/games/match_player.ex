@@ -23,6 +23,12 @@ defmodule Lofter.Games.MatchPlayer do
     |> validate_required([:position])
   end
 
+  def changeset(match_player, attrs \\ %{}) do
+    match_player
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
+  end
+
   def order_by_position_query do
     from mp in __MODULE__,
       order_by: mp.position,

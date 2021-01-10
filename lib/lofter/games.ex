@@ -34,6 +34,23 @@ defmodule Lofter.Games do
     get_match!(match_id)
   end
 
+  def get_match_player!(match_players, match_player_id) do
+    case Integer.parse(match_player_id) do
+      {id, _} ->
+        [match_player | _rest] = Enum.filter(match_players, fn m -> m.id == id end)
+        match_player
+
+      :error ->
+        List.first(match_players)
+    end
+  end
+
+  def update_match_player(match_player, attrs) do
+    match_player
+    |> MatchPlayer.changeset(attrs)
+    |> Repo.update()
+  end
+
   def next_hole!(game_id, current_hole_position, holes_count) do
     next =
       Integer.mod(

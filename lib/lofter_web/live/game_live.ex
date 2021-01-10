@@ -22,6 +22,12 @@ defmodule LofterWeb.GameLive do
      |> assign(:open, false)}
   end
 
+  def handle_event("show_player", %{"match-player-id" => match_player_id}, socket) do
+    match_player = Lofter.Games.get_match_player!(socket.assigns.match.match_players, match_player_id)
+
+    {:noreply, assign(socket, :match_player, match_player)}
+  end
+
   def handle_event("set_current", %{"hole-id" => hole_id}, socket) do
     new_current = Lofter.Games.get_hole!(hole_id)
 
@@ -97,7 +103,7 @@ defmodule LofterWeb.GameLive do
     [player | _rest] =
       Enum.filter(match.match_players, fn mp -> mp.id == socket.assigns.match_player.id end)
 
-    [current | _rest] = Enum.filter(player.holes, fn h -> h.id == socket.assigns.current.id end)
+    current = update_current_hole(player.holes, socket)
 
     {
       :noreply,
@@ -106,5 +112,14 @@ defmodule LofterWeb.GameLive do
       |> assign(:match_player, player)
       |> assign(:current, current)
     }
+  end
+
+  defp update_current_hole(holes, socket) do
+    case Enum.filter(holes, fn h -> h.id == socket.assigns.current.id end) do
+      [current | _rest] ->
+        current
+      [] ->
+        socket.assigns.current
+    end
   end
 end
