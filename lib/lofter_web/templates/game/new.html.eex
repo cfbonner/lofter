@@ -9,6 +9,8 @@
     </div>
   <% end %>
 
+  <%= @user.email %>
+
   <div class="input-group string">
     <%= hidden_input f, :course, value: "" %>
     <%= label f, :course %>
@@ -25,42 +27,42 @@
       <% end %>
     </div>
 
-    <%= hidden_input f, :players, value: "" %>
-    <%= label f, :players %>
-    <%= error_tag f, :players %>
+    <%= label f, :player_ids %>
+    <%= error_tag f, :player_ids %>
     <div>
-      <%= label f, "players_1", class: "block" do %>
-        <%= radio_button f, :players, "1" %>
-        <span>1</span>
+      <%= label f, "player_ids", class: "block" do %>
+        <%= checkbox f, :player_ids, 
+                        name: "#{input_name(:match, :player_ids)}[]",
+                        checked_value: @user.id,
+                        hidden_input: false %>
+        <span class="inline-block w-6 h-6 rounded rounded-full bg-gray-900"></span>
       <% end %>
-
-      <%= label f, "players_2", class: "block" do %>
-        <%= radio_button f, :players, "2" %>
-        <span>2</span>
-      <% end %>
-
-      <%= label f, "players_3", class: "block" do %>
-        <%= radio_button f, :players, "3" %>
-        <span>3</span>
+      <%= label f, "player_ids", class: "block" do %>
+        <%= checkbox f, :player_ids, 
+                        name: "#{input_name(:match, :player_ids)}[]",
+                        checked_value: nil,
+                        hidden_input: false %>
+        <span class="inline-block w-6 h-6 rounded rounded-full bg-green-900"></span>
       <% end %>
     </div>
+    <a href="#">Add player</a>
 
     <%= hidden_input f, :length, value: "" %>
     <%= label f, :length %>
     <%= error_tag f, :length %>
     <div>
       <%= label f, "length_9", class: "block" do %>
-        <%= radio_button f, :length, "9" %>
+        <%= radio_button f, :length, 9 %>
         <span>9</span>
       <% end %>
 
       <%= label f, "length_18", class: "block" do %>
-        <%= radio_button f, :length, "18" %>
+        <%= radio_button f, :length, 18 %>
         <span>18</span>
       <% end %>
 
       <%= label f, "length_36", class: "block" do %>
-        <%= radio_button f, :length, "36" %>
+        <%= radio_button f, :length, 36 %>
         <span>36</span>
       <% end %>
     </div>
