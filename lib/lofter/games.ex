@@ -51,7 +51,7 @@ defmodule Lofter.Games do
     |> Repo.update()
   end
 
-  def next_hole!(game_id, current_hole_position, holes_count) do
+  def next_hole!(match_player_id, current_hole_position, holes_count) do
     next =
       Integer.mod(
         current_hole_position + 1,
@@ -64,7 +64,7 @@ defmodule Lofter.Games do
         _ -> next
       end
 
-    Repo.one(Hole.find_by_position_query(game_id, next_hole_position))
+    Repo.one(Hole.find_by_position_query(match_player_id, next_hole_position))
   end
 
   def prev_hole!(game_id, current_hole_position, holes_count) do
@@ -83,14 +83,14 @@ defmodule Lofter.Games do
     |> Repo.get(id)
   end
 
-  def add_hole!(match) do
+  def add_hole!(match, match_player) do
     position = match.length + 1
 
     match
     |> Match.settings_changeset(%{length: position})
     |> Repo.update()
 
-    match
+    match_player
     |> Ecto.build_assoc(:holes, %{par: 3, position: position})
     |> Repo.insert()
   end

@@ -6,7 +6,7 @@ defmodule Lofter.Games.MatchPlayer do
   schema "match_players" do
     belongs_to :match, Lofter.Games.Match
     belongs_to :user, Lofter.Accounts.User, foreign_key: :user_id
-    has_many :holes, Lofter.Games.Hole
+    has_many :holes, Lofter.Games.Hole, on_delete: :delete_all
     field :name, :string, default: "Woods"
     field :position, :integer
 
@@ -43,7 +43,7 @@ defmodule Lofter.Games.MatchPlayer do
 
   def sample_names do
     ~w(
-      Nelson Watson Palmer JonesSnead Player
+      Nelson Watson Palmer Jones Snead Player
       Hagen Hogan Woods Nicklaus
     )
   end

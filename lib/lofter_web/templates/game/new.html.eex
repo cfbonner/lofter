@@ -41,6 +41,7 @@
         <%= checkbox f, :player_ids, 
                         name: "#{input_name(:match, :player_ids)}[]",
                         checked_value: nil,
+                        checked: false,
                         hidden_input: false %>
         <span class="inline-block w-6 h-6 rounded rounded-full bg-green-900"></span>
       <% end %>

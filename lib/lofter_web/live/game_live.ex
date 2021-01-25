@@ -38,7 +38,10 @@ defmodule LofterWeb.GameLive do
   end
 
   def handle_event("add_another", _value, socket) do
-    {:ok, updated} = Lofter.Games.add_hole!(socket.assigns.match)
+    {:ok, updated} = Lofter.Games.add_hole!(
+      socket.assigns.match,
+      socket.assigns.match_player
+    )
     match = Lofter.Games.get_match!(socket.assigns.match.id)
 
     {:noreply,
@@ -50,11 +53,12 @@ defmodule LofterWeb.GameLive do
 
   def handle_event("next_hole", _value, socket) do
     current_match = socket.assigns.match
+    current_match_player = socket.assigns.match_player
     current_hole = socket.assigns.current
 
     new_current =
       Lofter.Games.next_hole!(
-        current_match.id,
+        current_match_player.id,
         current_hole.position,
         current_match.length
       )
@@ -64,11 +68,12 @@ defmodule LofterWeb.GameLive do
 
   def handle_event("previous_hole", _value, socket) do
     current_match = socket.assigns.match
+    current_match_player = socket.assigns.match_player
     current_hole = socket.assigns.current
 
     new_current =
       Lofter.Games.prev_hole!(
-        current_match.id,
+        current_match_player.id,
         current_hole.position,
         current_match.length
       )

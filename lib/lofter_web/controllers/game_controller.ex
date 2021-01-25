@@ -31,4 +31,8 @@ defmodule LofterWeb.GameController do
       }
     )
   end
+
+  def index(conn, _, user) do
+    render(conn, "index.html", user: user)
+  end
 end
