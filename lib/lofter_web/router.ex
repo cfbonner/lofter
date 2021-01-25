@@ -62,6 +62,7 @@ defmodule LofterWeb.Router do
   scope "/", LofterWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    resources "/games", ClubhouseController, only: [:index]
     resources "/game", GameController, only: [:new, :create, :edit]
 
     get "/user/settings", UserSettingsController, :edit

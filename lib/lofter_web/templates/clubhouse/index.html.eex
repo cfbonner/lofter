@@ -1,0 +1,11 @@
+<h1 class="text-xl">Clubhouse</h1>
+<%= for match <- @games do %>
+  <%= link to: Routes.game_path(@conn, :edit, match), 
+    class: 'flex w-full justify-between items-center px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300' do %>
+    <%= match.updated_at %>
+    <p class="font-bold"><%= match.inserted_at %></p>
+  <% end %>
+<% end %>
+<%= link "New game", 
+  to: Routes.game_path(@conn, :new), 
+  class: "button button-primary" %>
