@@ -5,6 +5,23 @@
     >
     <span class="text-sm">Handle</span>
   </button>
+
+  <div class="flex items-end justify-between">
+    <h3 class="text-md font-bold"><%= @match_player.name %></h3>
+    <div>
+    <a 
+      phx-click="previous_player" 
+      href="#" 
+      class="text-xs font-bold"
+      >Previous player</a> | 
+    <a 
+      phx-click="next_player" 
+      href="#" 
+      class="text-xs font-bold"
+      >Next player</a>
+    </div>
+  </div>
+
   <div class="flex items-end justify-between">
     <h3 class="text-2xl">Hole <%= @current.position %></h3>
     <div>
@@ -12,12 +29,12 @@
         phx-click="previous_hole" 
         href="#" 
         class="text-xs font-bold"
-        >Previous</a> | 
+        >Previous hole</a> | 
       <a 
         phx-click="next_hole" 
         href="#" 
         class="text-xs font-bold"
-        >Next</a>
+        >Next hole</a>
     </div>
   </div>
   <div>

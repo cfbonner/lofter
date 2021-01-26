@@ -18,14 +18,9 @@ defmodule LofterWeb.GameLive do
      socket
      |> assign(:match, match)
      |> assign(:match_player, match_player)
+     |> assign(:match_player_index, 0)
      |> assign(:current, current)
      |> assign(:open, false)}
-  end
-
-  def handle_event("show_player", %{"match-player-id" => match_player_id}, socket) do
-    match_player = Lofter.Games.get_match_player!(socket.assigns.match.match_players, match_player_id)
-
-    {:noreply, assign(socket, :match_player, match_player)}
   end
 
   def handle_event("set_current", %{"hole-id" => hole_id}, socket) do
@@ -49,6 +44,42 @@ defmodule LofterWeb.GameLive do
      |> assign(:match, match)
      |> assign(:current, List.last(match.holes))
      |> assign(:open, true)}
+  end
+
+  def handle_event("set_player", %{"match-player-id" => match_player_id}, socket) do
+    match_players = socket.assigns.match.match_players
+    [match_player | _rest] = Enum.filter(match_players, fn m -> m.id == match_player_id |> String.to_integer() end)
+
+    {
+      :noreply, 
+      socket
+      |> assign(:match_player, match_player)
+      |> assign(:match_player_index, Enum.find_index(match_players, fn m -> m == match_player end))
+    }
+  end
+
+  def handle_event("next_player", _value, socket) do
+    match_players = socket.assigns.match.match_players
+    new_index = rem(socket.assigns.match_player_index + 1, Enum.count(match_players))
+
+    {
+      :noreply, 
+      socket
+      |> assign(:match_player, Enum.at(match_players, new_index))
+      |> assign(:match_player_index, new_index)
+    }
+  end
+
+  def handle_event("previous_player", _value, socket) do
+    match_players = socket.assigns.match.match_players
+    new_index = rem(socket.assigns.match_player_index - 1, Enum.count(match_players))
+
+    {
+      :noreply, 
+      socket
+      |> assign(:match_player, Enum.at(match_players, new_index))
+      |> assign(:match_player_index, new_index)
+    }
   end
 
   def handle_event("next_hole", _value, socket) do

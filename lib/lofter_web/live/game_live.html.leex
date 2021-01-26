@@ -7,12 +7,12 @@
     <%= for player <- @match.match_players do %>
       <a 
         href="#" 
-        phx-click="show_player"
+        phx-click="set_player"
         phx-value-match-player-id="<%= player.id %>"
         class="block w-full bg-gray-300 text-center hover:bg-gray-400 
         <%= if player.id == @match_player.id do 'bg-gray-600 text-white hover:bg-gray-600' end %>"
       >
-       Player: <%= player.name %>
+        <%= player.name %>
       </a>
     <% end %>
   </div>
@@ -53,5 +53,5 @@
     </a>
 </section>
 
-<%= live_component @socket, LofterWeb.HoleEditComponent, id: "hole_edit", match: @match, current: @current, open: @open %>
+<%= live_component @socket, LofterWeb.HoleEditComponent, id: "hole_edit", match: @match, match_player: @match_player, current: @current, open: @open %>
 <div id="buffer" class="h-screen"></div>
