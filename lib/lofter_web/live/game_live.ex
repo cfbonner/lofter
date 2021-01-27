@@ -33,17 +33,17 @@ defmodule LofterWeb.GameLive do
   end
 
   def handle_event("add_another", _value, socket) do
-    {:ok, updated} = Lofter.Games.add_hole!(
-      socket.assigns.match,
-      socket.assigns.match_player
+    Lofter.Games.add_hole!(
+      socket.assigns.match
     )
-    match = Lofter.Games.get_match!(socket.assigns.match.id)
 
-    {:noreply,
-     socket
-     |> assign(:match, match)
-     |> assign(:current, List.last(match.holes))
-     |> assign(:open, true)}
+    Phoenix.PubSub.broadcast(
+      Lofter.PubSub,
+      "#{@topic}:#{socket.assigns.match.id}",
+      {:update_match, %{match_id: socket.assigns.match.id}}
+    )
+
+    {:noreply, socket}
   end
 
   def handle_event("set_player", %{"match-player-id" => match_player_id}, socket) do
