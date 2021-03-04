@@ -43,7 +43,7 @@ input[type=password] {
 }
 
 .input-group.boolean label::before {
-  @apply border border-gray-500 rounded;
+  @apply bg-white border border-gray-500 rounded;
 }
 
 .input-group.boolean:focus-within label::before {
