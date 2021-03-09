@@ -346,4 +346,20 @@ defmodule Lofter.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  @doc """
+  Search user by email
+
+  ## Examples
+
+      iex> search_users("user@emai")
+      [%User{email: "user@email.com"}, ...]
+
+      iex> search_users("no@users")
+      []
+
+  """
+  def search_users(name_query) do
+    Repo.all(from u in User, where: ilike(u.email, ^"%#{name_query}%"))
+  end
 end
