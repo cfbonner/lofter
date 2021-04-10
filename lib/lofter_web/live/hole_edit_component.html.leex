@@ -6,59 +6,61 @@
     <span class="text-sm">Handle</span>
   </button>
 
-  <div class="flex items-end justify-between">
-    <h3 class="text-md font-bold"><%= @match_player.name %></h3>
-    <div>
-    <a 
-      phx-click="previous_player" 
-      href="#" 
-      class="text-xs font-bold"
-      >Previous player</a> | 
-    <a 
-      phx-click="next_player" 
-      href="#" 
-      class="text-xs font-bold"
-      >Next player</a>
+  <div class="drawer-contents max-w-xl mx-auto">
+    <div class="flex items-end justify-between">
+      <h3 class="text-md font-bold"><%= @match_player.name %></h3>
+      <div>
+      <a 
+        phx-click="previous_player" 
+        href="#" 
+        class="text-xs font-bold"
+        >Previous player</a> | 
+      <a 
+        phx-click="next_player" 
+        href="#" 
+        class="text-xs font-bold"
+        >Next player</a>
+      </div>
     </div>
-  </div>
 
-  <div class="flex items-end justify-between">
-    <h3 class="text-2xl">Hole <%= @current.position %></h3>
-    <div>
-      <a 
-        phx-click="previous_hole" 
-        href="#" 
-        class="text-xs font-bold"
-        >Previous hole</a> | 
-      <a 
-        phx-click="next_hole" 
-        href="#" 
-        class="text-xs font-bold"
-        >Next hole</a>
+    <div class="flex items-end justify-between">
+      <h3 class="text-2xl">Hole <%= @current.position %></h3>
+      <div>
+        <a 
+          phx-click="previous_hole" 
+          href="#" 
+          class="text-xs font-bold"
+          >Previous hole</a> | 
+        <a 
+          phx-click="next_hole" 
+          href="#" 
+          class="text-xs font-bold"
+          >Next hole</a>
+      </div>
     </div>
-  </div>
-  <div>
-    <%= f = form_for :hole, "#", [phx_change: :update_hole] %>
-      <%= hidden_input f, :strokes, value: "" %>
-      <div
-        class="
-        overflow-y-scroll divide-y-2 divide-gray-200"
-      >
-        <%= for strokes <- (1..7) do %>
+    <div>
+      <%= f = form_for :hole, "#", [phx_change: :update_hole] %>
+        <%= hidden_input f, :strokes, value: "" %>
+        <div
+          class="
+          overflow-y-scroll divide-y-2 divide-gray-200"
+        >
+          <%= for strokes <- (1..7) do %>
+            <%= live_component(
+                  @socket, 
+                  LofterWeb.StrokeOptionComponent, 
+                  [form: f, strokes: strokes, current: @current]
+                )
+            %>
+          <% end %>
           <%= live_component(
                 @socket, 
                 LofterWeb.StrokeOptionComponent, 
-                [form: f, strokes: strokes, current: @current]
+                [form: f, strokes: 0, current: @current]
               )
           %>
-        <% end %>
-        <%= live_component(
-              @socket, 
-              LofterWeb.StrokeOptionComponent, 
-              [form: f, strokes: 0, current: @current]
-            )
-        %>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

@@ -15,6 +15,7 @@ defmodule Lofter.Games.MatchPlayer do
 
   def initial_changeset(match_player, attrs \\ %{}) do
     attrs_with_name = Map.put(attrs, :name, random_name())
+
     match_player
     |> cast(attrs_with_name, [:position, :user_id, :name])
     |> validate_required([:position])

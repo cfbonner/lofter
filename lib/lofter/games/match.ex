@@ -20,9 +20,15 @@ defmodule Lofter.Games.Match do
   end
 
   def build_players_and_holes(%{valid?: false} = changeset), do: changeset
+
   def build_players_and_holes(match) do
     match
-    |> cast(%{"match_players" => generate_match_players(match.changes.player_ids, match.changes.length)}, [])
+    |> cast(
+      %{
+        "match_players" => generate_match_players(match.changes.player_ids, match.changes.length)
+      },
+      []
+    )
     |> cast_assoc(
       :match_players,
       with: &Lofter.Games.MatchPlayer.initial_changeset/2
@@ -33,9 +39,9 @@ defmodule Lofter.Games.Match do
     Enum.with_index(player_ids)
     |> Enum.map(fn {user_id, position} ->
       %{
-        user_id: user_id, 
-        position: position, 
-        holes: Enum.map(1..hole_count, &(%{position: &1}))
+        user_id: user_id,
+        position: position,
+        holes: Enum.map(1..hole_count, &%{position: &1})
       }
     end)
   end

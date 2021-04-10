@@ -1,5 +1,4 @@
 defmodule LofterWeb.ClubhouseController do
-
   use LofterWeb, :controller
   alias Lofter.Clubhouse
 

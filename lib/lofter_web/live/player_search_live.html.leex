@@ -1,7 +1,10 @@
-<%= f = form_for :search, "#", [phx_change: :search] %>
+<%= f = form_for :search, "#", [phx_change: :search, phx_debounce: :blur] %>
   <div class="input-group string">
     <%= label f, :query %>
     <%= text_input f, :query %>
+  </div>
+  <div>
+    <%= link("Clear", to: "#", phx_click: :clear) %>
   </div>
 </form>
 

@@ -86,10 +86,12 @@ defmodule Lofter.Games do
   def add_hole!(match) do
     Enum.map(match.match_players, fn match_player ->
       position = Enum.count(match_player.holes) + 1
+
       match_player
       |> Ecto.build_assoc(:holes, %{par: 3, position: position})
       |> Repo.insert()
     end)
+
     match.id
   end
 end

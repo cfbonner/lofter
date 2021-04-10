@@ -9,9 +9,8 @@ let csrfToken = document
 let hooks = {};
 hooks.holes = {
   updated() {
-    const new_current = this.el.querySelector("[data-current=true]");
     window.scroll({
-      top: new_current.offsetTop - 8,
+      top: this.el.offsetTop - 8,
       behavior: "smooth",
     });
   },

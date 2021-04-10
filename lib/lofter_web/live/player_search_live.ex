@@ -13,6 +13,21 @@ defmodule LofterWeb.PlayerSearchLive do
      |> assign(:results, [])}
   end
 
+  @doc """
+  Handle empty search with no results
+  """
+  def handle_event("search", %{"search" => %{"query" => ""}}, socket) do
+    results = []
+
+    {:noreply,
+     socket
+     |> assign(:query, "")
+     |> assign(:results, results)}
+  end
+
+  @doc """
+  Handle search with results
+  """
   def handle_event("search", %{"search" => %{"query" => query}}, socket) do
     results = Lofter.Accounts.search_users(query)
 
@@ -20,5 +35,13 @@ defmodule LofterWeb.PlayerSearchLive do
      socket
      |> assign(:query, query)
      |> assign(:results, results)}
+  end
+
+  def handle_event("clear", _params, socket) do
+
+    {:noreply,
+     socket
+     |> assign(:query, "")
+     |> assign(:results, [])}
   end
 end

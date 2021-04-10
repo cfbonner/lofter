@@ -33,9 +33,7 @@ defmodule LofterWeb.GameLive do
   end
 
   def handle_event("add_another", _value, socket) do
-    Lofter.Games.add_hole!(
-      socket.assigns.match
-    )
+    Lofter.Games.add_hole!(socket.assigns.match)
 
     Phoenix.PubSub.broadcast(
       Lofter.PubSub,
@@ -48,13 +46,18 @@ defmodule LofterWeb.GameLive do
 
   def handle_event("set_player", %{"match-player-id" => match_player_id}, socket) do
     match_players = socket.assigns.match.match_players
-    [match_player | _rest] = Enum.filter(match_players, fn m -> m.id == match_player_id |> String.to_integer() end)
+
+    [match_player | _rest] =
+      Enum.filter(match_players, fn m -> m.id == match_player_id |> String.to_integer() end)
 
     {
-      :noreply, 
+      :noreply,
       socket
       |> assign(:match_player, match_player)
-      |> assign(:match_player_index, Enum.find_index(match_players, fn m -> m == match_player end))
+      |> assign(
+        :match_player_index,
+        Enum.find_index(match_players, fn m -> m == match_player end)
+      )
     }
   end
 
@@ -63,7 +66,7 @@ defmodule LofterWeb.GameLive do
     new_index = rem(socket.assigns.match_player_index + 1, Enum.count(match_players))
 
     {
-      :noreply, 
+      :noreply,
       socket
       |> assign(:match_player, Enum.at(match_players, new_index))
       |> assign(:match_player_index, new_index)
@@ -75,7 +78,7 @@ defmodule LofterWeb.GameLive do
     new_index = rem(socket.assigns.match_player_index - 1, Enum.count(match_players))
 
     {
-      :noreply, 
+      :noreply,
       socket
       |> assign(:match_player, Enum.at(match_players, new_index))
       |> assign(:match_player_index, new_index)
@@ -154,6 +157,7 @@ defmodule LofterWeb.GameLive do
     case Enum.filter(holes, fn h -> h.id == socket.assigns.current.id end) do
       [current | _rest] ->
         current
+
       [] ->
         socket.assigns.current
     end
