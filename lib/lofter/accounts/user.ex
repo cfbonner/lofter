@@ -1,12 +1,21 @@
 defmodule Lofter.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Lofter.Relationships.Friendship
 
   schema "user" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+
+    many_to_many :friends, Lofter.Accounts.User,
+      join_through: Friendship,
+      join_keys: [user_id: :id, friend_id: :id]
+
+    many_to_many :reverse_friends, Lofter.Accounts.User,
+      join_through: Friendship,
+      join_keys: [friend_id: :id, user_id: :id]
 
     timestamps()
   end
