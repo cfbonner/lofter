@@ -1,26 +1,35 @@
-<%= f = form_for :search, "#", [phx_change: :search, phx_debounce: :blur] %>
-  <div class="input-group string">
-    <%= label f, :query %>
-    <%= text_input f, :query %>
-  </div>
-  <div>
-    <%= link("Clear", to: "#", phx_click: :clear) %>
-  </div>
-</form>
+<div class="container">
+  <%= f = form_for :search, "#", [phx_change: :search, phx_debounce: :blur] %>
+    <div class="input-group string">
+      <div class="flex justify-between">
+      <%= label f, :query, "Search" %>
+      <%= if @query != "" do %>
+        <%= link("Clear", to: "#", phx_click: :clear, class: 'text-sm') %>
+      <% end %>
+      </div>
+      <%= text_input f, :query, [autofocus: true] %>
+    </div>
+  </form>
 
-<ul>
-  <%= for result <- @results do %>
-    <li>
-      <a 
-        href="#" 
-        class="
-          flex w-full justify-between items-center px-2 py-4 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"
-      >
-        <div>
-          <p class="font-bold"><%= result.email %></p>
-        </div>
-          <p class="text-4xl px-3 font-bold"></p>
-      </a>
-    </li>
-  <% end %>
-</ul>
+  <ul>
+    <%= for result <- @results do %>
+      <li>
+        <a 
+          phx-click="request_friendship"
+          phx-value-friend-id="<%= result.id %>"
+          href="#" 
+          class="
+            flex w-full justify-between items-center px-2 py-4 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"
+        >
+          <div>
+            <p class="font-bold"><%= result.email %></p>
+            <%= if result.friendship do %>
+              <p class="text-xs font-bold"><%= result.friendship.status %> since <%= result.friendship.updated_at %></p>
+            <% end %>
+          </div>
+            <p class="text-4xl px-3 font-bold"></p>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</div>

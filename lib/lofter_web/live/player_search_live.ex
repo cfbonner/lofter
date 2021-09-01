@@ -6,9 +6,12 @@ defmodule LofterWeb.PlayerSearchLive do
   use Phoenix.LiveView
   use Phoenix.HTML
 
-  def mount(_params, _session, socket) do
+  alias Lofter.Accounts.User
+
+  def mount(_params, %{"user" => user}, socket) do
     {:ok,
      socket
+     |> assign(:user, user)
      |> assign(:query, "")
      |> assign(:results, [])}
   end
@@ -29,7 +32,7 @@ defmodule LofterWeb.PlayerSearchLive do
   Handle search with results
   """
   def handle_event("search", %{"search" => %{"query" => query}}, socket) do
-    results = Lofter.Accounts.search_users(query)
+    results = Lofter.Accounts.search_users_with_friends(query, socket.assigns.user.id)
 
     {:noreply,
      socket
@@ -37,11 +40,28 @@ defmodule LofterWeb.PlayerSearchLive do
      |> assign(:results, results)}
   end
 
+  @doc """
+  Clear input and results list
+  """
   def handle_event("clear", _params, socket) do
 
     {:noreply,
      socket
      |> assign(:query, "")
      |> assign(:results, [])}
+  end
+
+  @doc """
+  Create a friend request
+  """
+  def handle_event("request_friendship", %{"friend-id" => friend_id}, socket) do
+    {id, _} = Integer.parse(friend_id)
+    results = Lofter.Relationships.request_friendship(%User{id: socket.assigns.user.id}, %User{id: id})
+
+    {:noreply, socket}
+    # {:noreply,
+    #  socket
+    #  |> assign(:query, query)
+    #  |> assign(:results, results)}
   end
 end

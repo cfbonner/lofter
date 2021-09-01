@@ -4,6 +4,8 @@
     <div class="text-right">
       <li><%= @current_user.email %></li>
       <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
+      <li><%= link "Search Users", to: Routes.player_search_path(@conn, :edit) %></li>
+      <li><%= link "Friends", to: Routes.user_friends_path(@conn, :index) %></li>
       <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
     </div>
   <% else %>

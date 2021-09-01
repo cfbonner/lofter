@@ -86,6 +86,13 @@ defmodule LofterWeb.Router do
   end
 
   scope "/", LofterWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/player-search", PlayerSearchController, :edit
+    resources "/user/friends", UserFriendsController, only: [:index, :update]
+  end
+
+  scope "/", LofterWeb do
     pipe_through [:browser]
 
     delete "/user/log_out", UserSessionController, :delete

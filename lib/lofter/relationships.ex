@@ -18,13 +18,13 @@ defmodule Lofter.Relationships do
       [%User{}, ...]
 
   """
-  def get_users_friends(user = %User{}) do
+  def get_users_friends(user = %User{}, status \\ :confirmed) do
     Repo.all(
       from friend in User,
         join: fs in Friendship,
         on: fs.user_id == ^user.id or fs.friend_id == ^user.id,
         where:
-          fs.status == :confirmed and friend.id != ^user.id and
+          fs.status == ^status and friend.id != ^user.id and
             (fs.user_id == friend.id or fs.friend_id == friend.id),
         limit: 500
     )
