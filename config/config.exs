@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :lofter,
   ecto_repos: [Lofter.Repo]
@@ -17,6 +17,18 @@ config :lofter, LofterWeb.Endpoint,
   render_errors: [view: LofterWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Lofter.PubSub,
   live_view: [signing_salt: "SYMd4CWa"]
+
+# Configures the mailer
+#
+# By default it uses the "Local" adapter which stores the emails
+# locally. You can see the emails in your browser, at "/dev/mailbox".
+#
+# For production it's recommended to configure a different adapter
+# at the `config/runtime.exs`.
+config :lofter, Lofter.Mailer, adapter: Swoosh.Adapters.Local
+
+# Swoosh API client is needed for adapters other than SMTP.
+config :swoosh, :api_client, false
 
 # Configures Elixir's Logger
 config :logger, :console,

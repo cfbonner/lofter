@@ -10,9 +10,9 @@ defmodule LofterWeb.Endpoint do
     signing_salt: "2+XCn5PK"
   ]
 
-  socket "/socket", LofterWeb.UserSocket,
-    websocket: [timeout: 45_000],
-    longpoll: false
+  # socket "/socket", LofterWeb.UserSocket,
+  #   websocket: [timeout: 45_000],
+  #   longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
