@@ -9,7 +9,7 @@
 
   <div class="input-group string">
     <%= label f, :email %>
-    <%= email_input f, :email, required: true, class: 'input-base input-text' %>
+    <%= email_input f, :email, required: true, class: "input-base input-text" %>
     <%= error_tag f, :email %>
   </div>
 
@@ -20,13 +20,13 @@
   </div>
 
   <div class="mb-2">
-    <%= submit "Register", class: 'button button-primary' %>
+    <%= submit "Register", class: "button button-primary" %>
   </div>
 <% end %>
 
 <p class="text-right">
-Already have an account? <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: 'font-bold text-gray-900 hover:underline' %>
+Already have an account? <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %>
 </p>
 <p class="text-right">
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: 'font-bold text-gray-900 hover:underline' %>
+  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %>
 </p>

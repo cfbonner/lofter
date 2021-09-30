@@ -23,9 +23,9 @@
   </div>
 
   <div class="mb-2">
-    <%= submit "Log in", class: 'button button-primary' %>
+    <%= submit "Log in", class: "button button-primary" %>
   </div>
 <% end %>
 
-<p class="text-right">Don't have an account? <%= link "Register", to: Routes.user_registration_path(@conn, :new), class: 'font-bold text-gray-900 hover:underline' %></p>
-<p class="text-right"><%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: 'font-bold text-gray-900 hover:underline' %></p>
+<p class="text-right">Don't have an account? <%= link "Register", to: Routes.user_registration_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %></p>
+<p class="text-right"><%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %></p>

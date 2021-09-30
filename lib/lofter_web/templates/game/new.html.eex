@@ -75,6 +75,6 @@
   </div>
 
   <div>
-    <%= submit "Start game", class: 'button button-primary' %>
+    <%= submit "Start game", class: "button button-primary" %>
   </div>
 <% end %>

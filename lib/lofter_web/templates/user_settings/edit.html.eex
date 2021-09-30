@@ -24,7 +24,7 @@
   </div>
 
   <div>
-    <%= submit "Change email", class: 'button' %>
+    <%= submit "Change email", class: "button" %>
   </div>
 <% end %>
 
@@ -58,6 +58,6 @@
   </div>
 
   <div>
-    <%= submit "Change password", class: 'button' %>
+    <%= submit "Change password", class: "button" %>
   </div>
 <% end %>
