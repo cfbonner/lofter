@@ -6,6 +6,7 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,
   },
+  mode: "jit",
   purge: [
     "../**/*.html.eex",
     "../**/*.html.leex",
@@ -15,9 +16,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["Source Sans Pro", ...defaultTheme.fontFamily.sans]
-      },
       colors: {
 	green: colors.emerald,
 	gray: colors.warmGray,

@@ -3,6 +3,5 @@
 // its own CSS file.
 
 import "smoothscroll-polyfill"
-import "fontsource-source-sans-pro"
 import "../css/app.scss"
 import live_sockect from "./live_socket"
