@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  phoenix:
+  app:
     build: 
       context: ./
       dockerfile: ./docker/app/Dockerfile

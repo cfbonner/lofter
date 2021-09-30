@@ -1,0 +1,27 @@
+FROM bitwalker/alpine-elixir-phoenix:latest
+
+ENV MIX_ENV prod
+
+# Add the files to the image
+ADD . . 
+
+# Cache Elixir deps
+RUN mix deps.get --only prod
+RUN mix deps.compile
+
+COPY assets/package.json assets/package-lock.json ./assets/
+RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
+COPY assets assets
+RUN npm run --prefix ./assets deploy
+RUN mix phx.digest
+
+# Compile app
+RUN mix compile
+
+RUN mix phx.digest
+
+COPY config/runtime.exs config/
+
+# Generate release
+ENTRYPOINT ["mix"]
+CMD ["release", "--overwrite"]
