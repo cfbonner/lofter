@@ -57,7 +57,7 @@ input[type=password] {
 .input-group.boolean input:checked + label::after {
   @apply text-green-700 bg-current;
 
-  mask-image: url('../static/images/icons/check.svg');
+  mask-image: url('/images/icons/check.svg');
   mask-size: 85%;
   mask-position: center;
   mask-repeat: no-repeat;

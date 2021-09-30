@@ -1,7 +1,2 @@
-// We need to import the CSS so that webpack will load it.
-// The MiniCssExtractPlugin is used to separate it out into
-// its own CSS file.
-
-import "smoothscroll-polyfill"
-import "../css/app.scss"
+import "alpinejs"
 import live_sockect from "./live_socket"
