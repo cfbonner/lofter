@@ -1,0 +1,44 @@
+version: "3"
+services:
+  db:
+    image: postgres:10.2-alpine
+    container_name: lofter-db
+    environment:
+      - POSTGRES_PASSWORD=postgres 
+      - POSTGRES_DB=lofter_prod
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - nginx-network
+  admin:
+    image: lofter-release
+    container_name: lofter-admin
+    build:
+      context: .
+      dockerfile: Dockerfile.run
+    command: 
+      - eval
+      - Lofter.Release.migrate
+    networks:
+      - nginx-network
+    depends_on:
+      - db
+    environment: 
+      - DATABASE_URL=${DATABASE_URL}
+  server:
+    image: lofter-release
+    container_name: lofter-server
+    environment:
+      - PORT=5000
+      - HOST=lofter.fakeshrimp.com
+      - DATABASE_URL=${DATABASE_URL}
+    expose:
+      - "5000"
+    command: start
+    networks:
+      - nginx-network
+    depends_on:
+      - db
+      - admin
+networks:
+  nginx-network:
+    external: true
