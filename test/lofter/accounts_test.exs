@@ -2,6 +2,8 @@ defmodule Lofter.AccountsTest do
   use Lofter.DataCase
 
   alias Lofter.Accounts
+  # import Lofter.AccountsFixtures
+  # alias Lofter.Accounts.{User, UserToken}
   import Lofter.AccountsFixtures
   alias Lofter.Accounts.{User, UserToken}
 
@@ -18,7 +20,7 @@ defmodule Lofter.AccountsTest do
 
   describe "get_user_by_email_and_password/2" do
     test "does not return the user if the email does not exist" do
-      refute Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
+      refute Accounts.get_user_by_email_and_password("unknown@example.com", "Hello world!")
     end
 
     test "does not return the user if the password is not valid" do
@@ -58,11 +60,11 @@ defmodule Lofter.AccountsTest do
     end
 
     test "validates email and password when given" do
-      {:error, changeset} = Accounts.register_user(%{email: "not valid", password: "not valid"})
+      {:error, changeset} = Accounts.register_user(%{email: "not valid", password: "badpass"})
 
       assert %{
                email: ["must have the @ sign and no spaces"],
-               password: ["should be at least 12 character(s)"]
+               password: ["at least one digit or punctuation character", "at least one upper case character", "should be at least 8 character(s)"]
              } = errors_on(changeset)
     end
 
@@ -70,7 +72,7 @@ defmodule Lofter.AccountsTest do
       too_long = String.duplicate("db", 100)
       {:error, changeset} = Accounts.register_user(%{email: too_long, password: too_long})
       assert "should be at most 160 character(s)" in errors_on(changeset).email
-      assert "should be at most 80 character(s)" in errors_on(changeset).password
+      assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
     test "validates email uniqueness" do
@@ -85,7 +87,7 @@ defmodule Lofter.AccountsTest do
 
     test "registers user with a hashed password" do
       email = unique_user_email()
-      {:ok, user} = Accounts.register_user(%{email: email, password: valid_user_password()})
+      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
       assert user.email == email
       assert is_binary(user.hashed_password)
       assert is_nil(user.confirmed_at)
@@ -104,7 +106,10 @@ defmodule Lofter.AccountsTest do
       password = valid_user_password()
 
       changeset =
-        Accounts.change_user_registration(%User{}, %{"email" => email, "password" => password})
+        Accounts.change_user_registration(
+          %User{},
+          valid_user_attributes(email: email, password: password)
+        )
 
       assert changeset.valid?
       assert get_change(changeset, :email) == email
@@ -241,11 +246,11 @@ defmodule Lofter.AccountsTest do
     test "allows fields to be set" do
       changeset =
         Accounts.change_user_password(%User{}, %{
-          "password" => "new valid password"
+          "password" => "New valid pa$$word"
         })
 
       assert changeset.valid?
-      assert get_change(changeset, :password) == "new valid password"
+      assert get_change(changeset, :password) == "New valid pa$$word"
       assert is_nil(get_change(changeset, :hashed_password))
     end
   end
@@ -258,12 +263,12 @@ defmodule Lofter.AccountsTest do
     test "validates password", %{user: user} do
       {:error, changeset} =
         Accounts.update_user_password(user, valid_user_password(), %{
-          password: "not valid",
+          password: "badpass",
           password_confirmation: "another"
         })
 
       assert %{
-               password: ["should be at least 12 character(s)"],
+               password: ["at least one digit or punctuation character", "at least one upper case character", "should be at least 8 character(s)"],
                password_confirmation: ["does not match password"]
              } = errors_on(changeset)
     end
@@ -274,7 +279,7 @@ defmodule Lofter.AccountsTest do
       {:error, changeset} =
         Accounts.update_user_password(user, valid_user_password(), %{password: too_long})
 
-      assert "should be at most 80 character(s)" in errors_on(changeset).password
+      assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
     test "validates current password", %{user: user} do
@@ -287,11 +292,11 @@ defmodule Lofter.AccountsTest do
     test "updates the password", %{user: user} do
       {:ok, user} =
         Accounts.update_user_password(user, valid_user_password(), %{
-          password: "new valid password"
+          password: "New valid pa$$word"
         })
 
       assert is_nil(user.password)
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
+      assert Accounts.get_user_by_email_and_password(user.email, "New valid pa$$word")
     end
 
     test "deletes all tokens for the given user", %{user: user} do
@@ -299,7 +304,7 @@ defmodule Lofter.AccountsTest do
 
       {:ok, _} =
         Accounts.update_user_password(user, valid_user_password(), %{
-          password: "new valid password"
+          password: "New valid pa$$word"
         })
 
       refute Repo.get_by(UserToken, user_id: user.id)
@@ -377,7 +382,7 @@ defmodule Lofter.AccountsTest do
     end
   end
 
-  describe "confirm_user/2" do
+  describe "confirm_user/1" do
     setup do
       user = user_fixture()
 
@@ -467,12 +472,12 @@ defmodule Lofter.AccountsTest do
     test "validates password", %{user: user} do
       {:error, changeset} =
         Accounts.reset_user_password(user, %{
-          password: "not valid",
+          password: "badpass",
           password_confirmation: "another"
         })
 
       assert %{
-               password: ["should be at least 12 character(s)"],
+               password: ["at least one digit or punctuation character", "at least one upper case character", "should be at least 8 character(s)"],
                password_confirmation: ["does not match password"]
              } = errors_on(changeset)
     end
@@ -480,18 +485,18 @@ defmodule Lofter.AccountsTest do
     test "validates maximum values for password for security", %{user: user} do
       too_long = String.duplicate("db", 100)
       {:error, changeset} = Accounts.reset_user_password(user, %{password: too_long})
-      assert "should be at most 80 character(s)" in errors_on(changeset).password
+      assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
     test "updates the password", %{user: user} do
-      {:ok, updated_user} = Accounts.reset_user_password(user, %{password: "new valid password"})
+      {:ok, updated_user} = Accounts.reset_user_password(user, %{password: "New valid pa$$word"})
       assert is_nil(updated_user.password)
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
+      assert Accounts.get_user_by_email_and_password(user.email, "New valid pa$$word")
     end
 
     test "deletes all tokens for the given user", %{user: user} do
       _ = Accounts.generate_user_session_token(user)
-      {:ok, _} = Accounts.reset_user_password(user, %{password: "new valid password"})
+      {:ok, _} = Accounts.reset_user_password(user, %{password: "New valid pa$$word"})
       refute Repo.get_by(UserToken, user_id: user.id)
     end
   end

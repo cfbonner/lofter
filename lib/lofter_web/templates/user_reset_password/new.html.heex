@@ -1,6 +1,6 @@
 <h1>Forgot your password?</h1>
 
-<%= form_for :user, Routes.user_reset_password_path(@conn, :create), fn f -> %>
+<.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}>
   <p class="mb-2">Enter your email, and we'll send you instructions for resetting your forgotten password.</p>
   <div class="input-group string">
     <%= label f, :email %>
@@ -10,7 +10,7 @@
   <div>
     <%= submit "Send instructions", class: 'button button-primary' %>
   </div>
-<% end %>
+</.form>
 
 <p class="text-right">
   <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |

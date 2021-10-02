@@ -1,6 +1,6 @@
 <h1>Register</h1>
 
-<%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
+<.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       <p>Oops, something went wrong! Please check the errors below.</p>
@@ -9,7 +9,7 @@
 
   <div class="input-group string">
     <%= label f, :email %>
-    <%= email_input f, :email, required: true, class: "input-base input-text" %>
+    <%= email_input f, :email, required: true %>
     <%= error_tag f, :email %>
   </div>
 
@@ -22,11 +22,8 @@
   <div class="mb-2">
     <%= submit "Register", class: "button button-primary" %>
   </div>
-<% end %>
+</.form>
 
-<p class="text-right">
-Already have an account? <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %>
-</p>
-<p class="text-right">
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %>
+<p class="text-right">Already have an account? <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %></p>
+  <p class="text-right"><%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %>
 </p>

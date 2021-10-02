@@ -57,6 +57,19 @@ defmodule LofterWeb.Router do
     end
   end
 
+  scope "/", LofterWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live "/search", PlayerSearchLive
+
+    resources "/games", ClubhouseController, only: [:index]
+    resources "/game", GameController, only: [:new, :create, :edit]
+
+    get "/user/settings", UserSettingsController, :edit
+    put "/user/settings", UserSettingsController, :update
+    get "/user/settings/confirm_email/:token", UserSettingsController, :confirm_email
+  end
+
   ## Authentication routes
 
   scope "/", LofterWeb do
@@ -73,24 +86,12 @@ defmodule LofterWeb.Router do
   end
 
   scope "/", LofterWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-    live "/search", PlayerSearchLive
-
-    resources "/games", ClubhouseController, only: [:index]
-    resources "/game", GameController, only: [:new, :create, :edit]
-
-    get "/user/settings", UserSettingsController, :edit
-    put "/user/settings", UserSettingsController, :update
-    get "/user/settings/confirm_email/:token", UserSettingsController, :confirm_email
-  end
-
-  scope "/", LofterWeb do
     pipe_through [:browser]
 
     delete "/user/log_out", UserSessionController, :delete
     get "/user/confirm", UserConfirmationController, :new
     post "/user/confirm", UserConfirmationController, :create
-    get "/user/confirm/:token", UserConfirmationController, :confirm
+    get "/user/confirm/:token", UserConfirmationController, :edit
+    post "/user/confirm/:token", UserConfirmationController, :update
   end
 end

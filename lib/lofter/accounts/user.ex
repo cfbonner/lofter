@@ -2,11 +2,10 @@ defmodule Lofter.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Inspect, except: [:password]}
   schema "user" do
     field :email, :string
-    field :password, :string, virtual: true
-    field :hashed_password, :string
+    field :password, :string, virtual: true, redact: true
+    field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
 
     timestamps()
@@ -48,10 +47,10 @@ defmodule Lofter.Accounts.User do
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 80)
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_length(:password, min: 8, max: 72)
+    |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
+    |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
     |> maybe_hash_password(opts)
   end
 
@@ -61,7 +60,7 @@ defmodule Lofter.Accounts.User do
 
     if hash_password? && password && changeset.valid? do
       changeset
-      |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
+      |> put_change(:hashed_password, Argon2.hash_pwd_salt(password))
       |> delete_change(:password)
     else
       changeset
@@ -114,15 +113,15 @@ defmodule Lofter.Accounts.User do
   Verifies the password.
 
   If there is no user or the user doesn't have a password, we call
-  `Bcrypt.no_user_verify/0` to avoid timing attacks.
+  `Argon2.no_user_verify/0` to avoid timing attacks.
   """
   def valid_password?(%Lofter.Accounts.User{hashed_password: hashed_password}, password)
       when is_binary(hashed_password) and byte_size(password) > 0 do
-    Bcrypt.verify_pass(password, hashed_password)
+    Argon2.verify_pass(password, hashed_password)
   end
 
   def valid_password?(_, _) do
-    Bcrypt.no_user_verify()
+    Argon2.no_user_verify()
     false
   end
 

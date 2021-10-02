@@ -9,15 +9,15 @@ defmodule LofterWeb.UserConfirmationControllerTest do
     %{user: user_fixture()}
   end
 
-  describe "GET /users/confirm" do
-    test "renders the confirmation page", %{conn: conn} do
+  describe "GET /user/confirm" do
+    test "renders the resend confirmation page", %{conn: conn} do
       conn = get(conn, Routes.user_confirmation_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "Resend confirmation instructions</h1>"
+      assert response =~ "<h1>Resend confirmation instructions</h1>"
     end
   end
 
-  describe "POST /users/confirm" do
+  describe "POST /user/confirm" do
     @tag :capture_log
     test "sends a new confirmation token", %{conn: conn, user: user} do
       conn =
@@ -30,7 +30,7 @@ defmodule LofterWeb.UserConfirmationControllerTest do
       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "confirm"
     end
 
-    test "does not send confirmation token if account is confirmed", %{conn: conn, user: user} do
+    test "does not send confirmation token if User is confirmed", %{conn: conn, user: user} do
       Repo.update!(Accounts.User.confirm_changeset(user))
 
       conn =
@@ -55,39 +55,50 @@ defmodule LofterWeb.UserConfirmationControllerTest do
     end
   end
 
-  describe "GET /users/confirm/:token" do
+  describe "GET /user/confirm/:token" do
+    test "renders the confirmation page", %{conn: conn} do
+      conn = get(conn, Routes.user_confirmation_path(conn, :edit, "some-token"))
+      response = html_response(conn, 200)
+      assert response =~ "<h1>Confirm account</h1>"
+
+      form_action = Routes.user_confirmation_path(conn, :update, "some-token")
+      assert response =~ "action=\"#{form_action}\""
+    end
+  end
+
+  describe "POST /user/confirm/:token" do
     test "confirms the given token once", %{conn: conn, user: user} do
       token =
         extract_user_token(fn url ->
           Accounts.deliver_user_confirmation_instructions(user, url)
         end)
 
-      conn = get(conn, Routes.user_confirmation_path(conn, :confirm, token))
+      conn = post(conn, Routes.user_confirmation_path(conn, :update, token))
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :info) =~ "Account confirmed successfully"
+      assert get_flash(conn, :info) =~ "User confirmed successfully"
       assert Accounts.get_user!(user.id).confirmed_at
       refute get_session(conn, :user_token)
       assert Repo.all(Accounts.UserToken) == []
 
       # When not logged in
-      conn = get(conn, Routes.user_confirmation_path(conn, :confirm, token))
+      conn = post(conn, Routes.user_confirmation_path(conn, :update, token))
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) =~ "Account confirmation link is invalid or it has expired"
+      assert get_flash(conn, :error) =~ "User confirmation link is invalid or it has expired"
 
       # When logged in
       conn =
         build_conn()
         |> log_in_user(user)
-        |> get(Routes.user_confirmation_path(conn, :confirm, token))
+        |> post(Routes.user_confirmation_path(conn, :update, token))
 
       assert redirected_to(conn) == "/"
       refute get_flash(conn, :error)
     end
 
     test "does not confirm email with invalid token", %{conn: conn, user: user} do
-      conn = get(conn, Routes.user_confirmation_path(conn, :confirm, "oops"))
+      conn = post(conn, Routes.user_confirmation_path(conn, :update, "oops"))
       assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) =~ "Account confirmation link is invalid or it has expired"
+      assert get_flash(conn, :error) =~ "User confirmation link is invalid or it has expired"
       refute Accounts.get_user!(user.id).confirmed_at
     end
   end

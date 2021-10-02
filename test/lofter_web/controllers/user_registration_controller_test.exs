@@ -7,7 +7,7 @@ defmodule LofterWeb.UserRegistrationControllerTest do
     test "renders registration page", %{conn: conn} do
       conn = get(conn, Routes.user_registration_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "Register</h1>"
+      assert response =~ "<h1>Register</h1>"
       assert response =~ "Log in</a>"
       assert response =~ "Register</a>"
     end
@@ -25,11 +25,11 @@ defmodule LofterWeb.UserRegistrationControllerTest do
 
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
-          "user" => %{"email" => email, "password" => valid_user_password()}
+          "user" => valid_user_attributes(email: email)
         })
 
       assert get_session(conn, :user_token)
-      assert redirected_to(conn) =~ "/"
+      assert redirected_to(conn) == "/"
 
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
@@ -42,13 +42,13 @@ defmodule LofterWeb.UserRegistrationControllerTest do
     test "render errors for invalid data", %{conn: conn} do
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
-          "user" => %{"email" => "with spaces", "password" => "too short"}
+          "user" => %{"email" => "with spaces", "password" => "short"}
         })
 
       response = html_response(conn, 200)
       assert response =~ "<h1>Register</h1>"
       assert response =~ "must have the @ sign and no spaces"
-      assert response =~ "should be at least 12 character"
+      assert response =~ "should be at least 8 character"
     end
   end
 end

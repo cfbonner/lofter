@@ -11,11 +11,11 @@ defmodule LofterWeb.UserConfirmationController do
     if user = Accounts.get_user_by_email(email) do
       Accounts.deliver_user_confirmation_instructions(
         user,
-        &Routes.user_confirmation_url(conn, :confirm, &1)
+        &Routes.user_confirmation_url(conn, :edit, &1)
       )
     end
 
-    # Regardless of the outcome, show an impartial success/error message.
+    # In order to prevent user enumeration attacks, regardless of the outcome, show an impartial success/error message.
     conn
     |> put_flash(
       :info,
@@ -25,13 +25,17 @@ defmodule LofterWeb.UserConfirmationController do
     |> redirect(to: "/")
   end
 
+  def edit(conn, %{"token" => token}) do
+    render(conn, "edit.html", token: token)
+  end
+
   # Do not log in the user after confirmation to avoid a
   # leaked token giving the user access to the account.
-  def confirm(conn, %{"token" => token}) do
+  def update(conn, %{"token" => token}) do
     case Accounts.confirm_user(token) do
       {:ok, _} ->
         conn
-        |> put_flash(:info, "Account confirmed successfully.")
+        |> put_flash(:info, "User confirmed successfully.")
         |> redirect(to: "/")
 
       :error ->
@@ -45,7 +49,7 @@ defmodule LofterWeb.UserConfirmationController do
 
           %{} ->
             conn
-            |> put_flash(:error, "Account confirmation link is invalid or it has expired.")
+            |> put_flash(:error, "User confirmation link is invalid or it has expired.")
             |> redirect(to: "/")
         end
     end
