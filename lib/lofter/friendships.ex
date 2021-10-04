@@ -1,13 +1,13 @@
-defmodule Lofter.Relationships do
+defmodule Lofter.Friendships do
   @moduledoc """
-  The Relationships context.
+  The Friendships context.
   """
 
   import Ecto.Query, warn: false
   alias Lofter.Repo
 
   alias Lofter.Accounts.User
-  alias Lofter.Relationships.Friendship
+  alias Lofter.Friendships.Friendship
 
   @doc """
   Returns the list of users friendships.
@@ -55,7 +55,7 @@ defmodule Lofter.Relationships do
 
   """
   def confirm_friendship(%User{id: user_id}, %User{id: friend_id}) do
-    friendship = Friendship.user_friend_request(user_id, friend_id)
+    friendship = Friendship.users_friendship_request(user_id, friend_id)
     case Repo.update_all(friendship, set: [status: :confirmed]) do
       {1, nil} -> { :ok, Map.put(friendship, :status, :confirmed) }
       _ -> :error
@@ -63,13 +63,17 @@ defmodule Lofter.Relationships do
   end
 
   def reject_friendship(%User{id: user_id}, %User{id: friend_id}) do
-    case Repo.delete_all(Friendship.user_friend_request(user_id, friend_id)) do
-      {1, nil} -> :ok
+    friendship = Friendship.users_friendship_request(user_id, friend_id)
+    case Repo.delete_all(friendship) do
+      {1, nil} -> { :ok, Map.put(friendship, :status, :rejected) }
       _ -> :error
     end
   end
 
-  def unfriend_friendship(friendship) do
-    {:ok, friendship}
+  def unfriend_friendship(%User{id: user_id}, %User{id: friend_id}) do
+    case Repo.delete_all(Friendship.users_friendship(user_id, friend_id)) do
+      {1, nil} -> :ok
+      _ -> :error
+    end
   end
 end

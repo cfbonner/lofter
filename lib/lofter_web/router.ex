@@ -60,11 +60,8 @@ defmodule LofterWeb.Router do
   scope "/", LofterWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    live "/search", PlayerSearchLive
-
     resources "/games", ClubhouseController, only: [:index]
     resources "/game", GameController, only: [:new, :create, :edit]
-
     get "/user/settings", UserSettingsController, :edit
     put "/user/settings", UserSettingsController, :update
     get "/user/settings/confirm_email/:token", UserSettingsController, :confirm_email
@@ -88,8 +85,8 @@ defmodule LofterWeb.Router do
   scope "/", LofterWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/player-search", PlayerSearchController, :edit
-    resources "/user/friends", UserFriendsController, only: [:index, :update]
+    get "/user/search", PlayerSearchController, :edit
+    get "/user/friends", UserFriendsController, :index
   end
 
   scope "/", LofterWeb do

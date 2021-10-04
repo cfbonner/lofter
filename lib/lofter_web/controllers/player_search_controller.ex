@@ -9,11 +9,8 @@ defmodule LofterWeb.PlayerSearchController do
   end
 
   def edit(conn, _params, current_user) do
-
     live_render(conn, LofterWeb.PlayerSearchLive,
-      session: %{
-        "user" => current_user
-      }
+      session: %{ "user" => current_user }
     )
   end
 end

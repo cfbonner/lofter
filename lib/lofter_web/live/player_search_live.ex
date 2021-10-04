@@ -44,7 +44,6 @@ defmodule LofterWeb.PlayerSearchLive do
   Clear input and results list
   """
   def handle_event("clear", _params, socket) do
-
     {:noreply,
      socket
      |> assign(:query, "")
@@ -56,12 +55,8 @@ defmodule LofterWeb.PlayerSearchLive do
   """
   def handle_event("request_friendship", %{"friend-id" => friend_id}, socket) do
     {id, _} = Integer.parse(friend_id)
-    results = Lofter.Relationships.request_friendship(%User{id: socket.assigns.user.id}, %User{id: id})
+    results = Lofter.Friendships.request_friendship(%User{id: socket.assigns.user.id}, %User{id: id})
 
     {:noreply, socket}
-    # {:noreply,
-    #  socket
-    #  |> assign(:query, query)
-    #  |> assign(:results, results)}
   end
 end

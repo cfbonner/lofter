@@ -1,22 +1,23 @@
 <div class="container">
-  <%= f = form_for :search, "#", [phx_change: :search, phx_debounce: :blur] %>
+  <h1>User search</h1>
+  <.form let={f} for={:search} phx-change="search" action="#">
     <div class="input-group string">
-      <div class="flex justify-between">
-      <%= label f, :query, "Search" %>
-      <%= if @query != "" do %>
-        <%= link("Clear", to: "#", phx_click: :clear, class: 'text-sm') %>
-      <% end %>
+      <%= label f, :query, "Search", class: "sr-only" %>
+      <%= text_input f, :query, [autofocus: true, phx_debounce: 250] %>
+      <div class="flex justify-end">
+        <%= if @query != "" do %>
+          <%= link("Clear", to: "#", phx_click: :clear, class: 'text-sm') %>
+        <% end %>
       </div>
-      <%= text_input f, :query, [autofocus: true] %>
     </div>
-  </form>
+  </.form>
 
   <ul>
     <%= for result <- @results do %>
       <li>
         <a 
           phx-click="request_friendship"
-          phx-value-friend-id="<%= result.id %>"
+          phx-value-friend-id={result.id}
           href="#" 
           class="
             flex w-full justify-between items-center px-2 py-4 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"

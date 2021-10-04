@@ -1,0 +1,33 @@
+<h2 class="mb-4">Pending</h2>
+<%= for request <- @friend_requests do %>
+  <div class="border mb-2 p-2 w-full flex justify-between">
+    <p><%= request.email %></p>
+    <ul class="text-right">
+      <li>
+        <a href="#accept" phx-value-id={request.id} phx-capture-click="accept" class="font-bold text-green-600 hover:underline">
+          Accept
+        </a>
+      </li>
+      <li>
+        <%= link "Ignore", to: "", class: "font-bold text-gray-900 hover:underline" %>
+      </li>
+      <li>
+        <%= link "Block", to: "", class: "font-bold text-gray-900 hover:underline" %>
+      </li>
+    </ul>
+  </div>
+<% end %>
+
+<h2 class="mb-4">Friends</h2>
+<%= for friend <- @friends do %>
+  <div class="border mb-2 p-2 w-full flex justify-between">
+    <%= friend.email %>
+    <ul class="text-right">
+      <li>
+        <a href="#remove" phx-value-id={friend.id} phx-capture-click="remove" class="font-bold text-red-600 hover:underline">
+          Remove
+        </a>
+      </li>
+    </ul>
+  </div>
+<% end %>

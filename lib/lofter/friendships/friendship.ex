@@ -1,8 +1,7 @@
-defmodule Lofter.Relationships.Friendship do
+defmodule Lofter.Friendships.Friendship do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
-  alias Lofter.Repo
 
   @primary_key false
   schema "friendships" do
@@ -18,16 +17,22 @@ defmodule Lofter.Relationships.Friendship do
     |> cast(attrs, [:user_id, :friend_id, :status])
     |> validate_required([:status])
     |> unique_constraint(
-      [:user_id, :friend_id],
-      name: :friendships_user_id_friend_id_index
+      [:user_id, :friend_id], name: :friendships_user_id_friend_id_index
     )
     |> unique_constraint(
-      [:friend_id, :user_id],
-      name: :friendships_friend_id_user_id_index
+      [:friend_id, :user_id], name: :friendships_friend_id_user_id_index
     )
   end
 
-  def user_friend_request(user_id, friend_id) do
+  def users_friendship(user_id, friend_id) do
+    from friendship in __MODULE__,
+      where: (
+        (friendship.user_id == ^user_id and friendship.friend_id == ^friend_id) or
+        (friendship.user_id == ^friend_id and friendship.friend_id == ^user_id)
+      ) and friendship.status == :confirmed
+  end
+
+  def users_friendship_request(user_id, friend_id) do
     from friendship in __MODULE__,
       where:
         friendship.user_id == ^user_id and friendship.friend_id == ^friend_id and

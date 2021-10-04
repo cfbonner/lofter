@@ -382,7 +382,7 @@ defmodule Lofter.Accounts do
 
   def users_with_friends(query, user_id) do
     from u in query,
-      left_join: fs in Lofter.Relationships.Friendship,
+      left_join: fs in Lofter.Friendships.Friendship,
       on: (fs.user_id == u.id and fs.friend_id == ^user_id) or
           (fs.friend_id == u.id and fs.user_id == ^user_id),
       where: u.id != ^user_id,
