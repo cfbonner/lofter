@@ -46,7 +46,7 @@ defmodule Lofter.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:esbuild, "~> 0.1", runtime: Mix.env() == :dev},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.16.0"},
+      {:phoenix_live_view, "~> 0.16.4"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
