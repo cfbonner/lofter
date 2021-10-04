@@ -23,7 +23,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
     onBeforeElUpdated(from, to) {
       if (from._x_dataStack) {
         window.Alpine.clone(from, to);
-      },
+      }
     },
   },
 });
