@@ -31,4 +31,13 @@ defmodule LofterWeb.UserFriendsLive do
 
     {:noreply, socket}
   end
+
+  @doc """
+  Handle friend rejection
+  """
+  def handle_event("reject", %{"id" => id}, socket) do
+    Friendships.reject_friendship(%User{id: id}, %User{id: socket.assigns.user.id})
+
+    {:noreply, socket}
+  end
 end

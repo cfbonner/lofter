@@ -34,8 +34,9 @@ defmodule Lofter.Friendships.Friendship do
 
   def users_friendship_request(user_id, friend_id) do
     from friendship in __MODULE__,
-      where:
-        friendship.user_id == ^user_id and friendship.friend_id == ^friend_id and
-          friendship.status == :pending
+      where: (
+        (friendship.user_id == ^user_id and friendship.friend_id == ^friend_id) or
+        (friendship.user_id == ^friend_id and friendship.friend_id == ^user_id)
+      ) and friendship.status == :pending
   end
 end

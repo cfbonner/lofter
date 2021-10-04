@@ -26,7 +26,8 @@ defmodule Lofter.Friendships do
         where:
           fs.status == ^status and friend.id != ^user.id and
             (fs.user_id == friend.id or fs.friend_id == friend.id),
-        limit: 500
+        select_merge: %{friend_requestor: fs.user_id},
+        limit: 50
     )
   end
 
