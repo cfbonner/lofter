@@ -13,6 +13,7 @@ defmodule LofterWeb.PlayerSearchLive do
      socket
      |> assign(:user, user)
      |> assign(:query, "")
+     |> assign(:selected_user, %User{})
      |> assign(:results, [])}
   end
 
@@ -24,7 +25,6 @@ defmodule LofterWeb.PlayerSearchLive do
 
     {:noreply,
      socket
-     |> assign(:query, "")
      |> assign(:results, results)}
   end
 
@@ -36,7 +36,6 @@ defmodule LofterWeb.PlayerSearchLive do
 
     {:noreply,
      socket
-     |> assign(:query, query)
      |> assign(:results, results)}
   end
 
@@ -46,8 +45,19 @@ defmodule LofterWeb.PlayerSearchLive do
   def handle_event("clear", _params, socket) do
     {:noreply,
      socket
+     |> push_event("toggle-drawer", %{open: false})
      |> assign(:query, "")
      |> assign(:results, [])}
+  end
+
+  @doc """
+  Select user for further actions
+  """
+  def handle_event("select_user", %{"user_id" => user_id}, socket) do
+    {:noreply, 
+      socket
+      |> push_event("toggle-drawer", %{open: true})
+      |> assign(:selected_user, Lofter.Accounts.get_user!(user_id))}
   end
 
   @doc """

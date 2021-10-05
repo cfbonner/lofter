@@ -16,8 +16,8 @@
     <%= for result <- @results do %>
       <li>
         <a 
-          phx-click="request_friendship"
-          phx-value-friend-id={result.id}
+          phx-click="select_user"
+          phx-value-user_id={result.id}
           href="#" 
           class="
             flex w-full justify-between items-center px-2 py-4 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"
@@ -34,3 +34,10 @@
     <% end %>
   </ul>
 </div>
+
+<%= live_component LofterWeb.DrawerComponent, id: "page_drawer", open: true do %>
+  <%= live_component LofterWeb.UserSummaryComponent, id: "page_drawer_content", selected_user: @selected_user %>
+<% end %>
+
+<div id="buffer" class="h-screen"></div>
+
