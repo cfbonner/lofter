@@ -59,6 +59,10 @@ defmodule Lofter.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user_with_friendship!(id, user_id) do
+    Repo.one(user_with_friendship(id, user_id))
+  end
+
   ## User registration
 
   @doc """
@@ -365,11 +369,22 @@ defmodule Lofter.Accounts do
     |> Repo.all()
   end
 
-  def search_users_with_friends(search_term, user_id) do
+  def search_users_with_friendships(search_term, user_id) do
     User
     |> user_email_is_like(search_term)
-    |> users_with_friends(user_id)
+    |> users_with_friendships(user_id)
     |> Repo.all()
+  end
+
+  def user_with_friendship(id, user_id) do
+    from u in User,
+      where: u.id == ^id,
+      left_join: fs in Lofter.Friendships.Friendship,
+      on:
+        (fs.user_id == u.id and fs.friend_id == ^user_id) or
+          (fs.friend_id == u.id and fs.user_id == ^user_id),
+      select_merge: %{friendship: fs},
+      limit: 1
   end
 
   @doc """
@@ -380,10 +395,11 @@ defmodule Lofter.Accounts do
       where: ilike(u.email, ^"%#{search_term}%")
   end
 
-  def users_with_friends(query, user_id) do
+  def users_with_friendships(query, user_id) do
     from u in query,
       left_join: fs in Lofter.Friendships.Friendship,
-      on: (fs.user_id == u.id and fs.friend_id == ^user_id) or
+      on:
+        (fs.user_id == u.id and fs.friend_id == ^user_id) or
           (fs.friend_id == u.id and fs.user_id == ^user_id),
       where: u.id != ^user_id,
       select: %{id: u.id, email: u.email, friendship: fs},

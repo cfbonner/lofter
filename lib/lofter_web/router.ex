@@ -13,7 +13,6 @@ defmodule LofterWeb.Router do
     plug :fetch_current_user
   end
 
-
   # Enables the Swoosh mailbox preview in development.
   #
   # Note that preview only shows emails that were sent by the same
@@ -85,8 +84,15 @@ defmodule LofterWeb.Router do
   scope "/", LofterWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    get "/user/search", PlayerSearchController, :edit
-    get "/user/friends", UserFriendsController, :index
+  end
+
+  live_session :default, on_mount: LofterWeb.UserLiveAuth do
+    scope "/" do
+      pipe_through [:browser, :require_authenticated_user]
+      live "/user/friends", LofterWeb.UserFriendsLive.Index, :index
+      live "/user/friends/:id", LofterWeb.UserFriendsLive.Show, :show
+      live "/user/search", LofterWeb.UserSearchLive, :index
+    end
   end
 
   scope "/", LofterWeb do

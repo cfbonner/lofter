@@ -11,9 +11,12 @@ defmodule LofterWeb.UserFriendsController do
   def index(conn, _params, current_user) do
     friends = Lofter.Friendships.get_users_friends(current_user)
     friend_requests = Lofter.Friendships.get_users_friends(current_user, :pending)
-    live_render(conn, LofterWeb.UserFriendsLive, 
-      session: %{ 
-        "user" => current_user, "friends" => friends, "friend_requests" => friend_requests
+
+    live_render(conn, LofterWeb.UserFriendsLive,
+      session: %{
+        "user" => current_user,
+        "friends" => friends,
+        "friend_requests" => friend_requests
       }
     )
   end

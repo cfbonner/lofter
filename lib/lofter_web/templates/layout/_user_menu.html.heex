@@ -1,10 +1,17 @@
-<ul>
-<%= if @current_user do %>
-  <li><%= @current_user.email %></li>
-  <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
-  <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
-<% else %>
-  <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
-  <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
-<% end %>
+<ul class="flex space-x-2 justify-between w-full p-2">
+  <li><%= link "Home", to: Routes.clubhouse_path(@conn, :index) %></li>
+  <li class="text-right">
+    <ul>
+      <%= if @current_user do %>
+      <li><%= link @current_user.email, to: Routes.user_settings_path(@conn, :edit) %></li>
+      <li><%= link "Friends", to: Routes.user_friends_index_path(@conn, :index) %></li>
+      <li><%= link "Search", to: Routes.user_search_path(@conn, :index) %></li>
+      <hr class="w-4 my-2 ml-auto"/>
+      <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
+      <% else %>
+      <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
+      <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
+      <% end %>
+    </ul>
+  </li>
 </ul>

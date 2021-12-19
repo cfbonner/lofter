@@ -26,55 +26,48 @@ defmodule Lofter.Friendships do
         where:
           fs.status == ^status and friend.id != ^user.id and
             (fs.user_id == friend.id or fs.friend_id == friend.id),
-        select_merge: %{friend_requestor: fs.user_id},
+        select_merge: %{friendship: fs},
         limit: 50
     )
   end
 
-  @doc """
-  Creates a 'pending' friendship
-
-  ## Examples
-
-      iex> request_friendship(%User{}, %User{})
-      {:ok, %User{}}
-
-  """
-  def request_friendship(%User{id: user_id}, %User{id: friend_id}) do
-    %Friendship{user_id: user_id, friend_id: friend_id}
-    |> Friendship.changeset(%{status: :pending})
-    |> Repo.insert()
+  def get_users_friend(user = %User{}, friend = %User{}, status \\ :confirmed) do
+    Repo.one(
+      from friend in User,
+        join: fs in Friendship,
+        on: fs.user_id == ^user.id or fs.friend_id == ^user.id,
+        where:
+          fs.status == ^status and friend.id != ^user.id and
+            (fs.user_id == friend.id or fs.friend_id == friend.id),
+        select_merge: %{friendship: fs}
+    )
   end
 
-  @doc """
-  Updates friendship status to 'confirmed'
+  def request_friendship(%User{id: user_id}, %User{id: friend_id}),
+    do: update_friend_status(:pending, %User{id: user_id}, %User{id: friend_id})
 
-  ## Examples
+  def confirm_friendship(%User{id: user_id}, %User{id: friend_id}),
+    do: update_friend_status(:confirmed, %User{id: user_id}, %User{id: friend_id})
 
-      iex> confirm_friendship(%User{}, %User{})
-      {:ok, %Friendship{}}
+  def unfriend_friendship(%User{id: user_id}, %User{id: friend_id}),
+    do: update_friend_status(:unfriended, %User{id: user_id}, %User{id: friend_id})
 
-  """
-  def confirm_friendship(%User{id: user_id}, %User{id: friend_id}) do
-    friendship = Friendship.users_friendship_request(user_id, friend_id)
-    case Repo.update_all(friendship, set: [status: :confirmed]) do
-      {1, nil} -> { :ok, Map.put(friendship, :status, :confirmed) }
-      _ -> :error
-    end
-  end
+  def reject_friendship(%User{id: user_id}, %User{id: friend_id}),
+    do: update_friend_status(:rejected, %User{id: user_id}, %User{id: friend_id})
 
-  def reject_friendship(%User{id: user_id}, %User{id: friend_id}) do
-    friendship = Friendship.users_friendship_request(user_id, friend_id)
-    case Repo.delete_all(friendship) do
-      {1, nil} -> { :ok, Map.put(friendship, :status, :rejected) }
-      _ -> :error
-    end
-  end
+  defp update_friend_status(status, %User{id: user_id}, %User{id: friend_id}) do
+    attrs = %{status: status, last_actioned_by: user_id}
 
-  def unfriend_friendship(%User{id: user_id}, %User{id: friend_id}) do
-    case Repo.delete_all(Friendship.users_friendship(user_id, friend_id)) do
-      {1, nil} -> :ok
-      _ -> :error
+    case Repo.one(Friendship.users_friendship(user_id, friend_id, :any)) do
+      nil ->
+        %Friendship{user_id: user_id, friend_id: friend_id}
+        |> Friendship.changeset(attrs)
+        |> Repo.insert()
+
+      record ->
+        record
+        |> Friendship.changeset(attrs)
+        |> Repo.update()
     end
   end
 end

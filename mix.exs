@@ -14,7 +14,8 @@ defmodule Lofter.MixProject do
       releases: [
         lofter: [
           steps: [
-            :assemble, :tar
+            :assemble,
+            :tar
           ]
         ]
       ]
@@ -57,6 +58,7 @@ defmodule Lofter.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:timex, "~> 3.7.6"}
     ]
   end
 

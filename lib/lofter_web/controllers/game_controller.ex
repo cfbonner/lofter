@@ -17,6 +17,7 @@ defmodule LofterWeb.GameController do
 
   def create(conn, %{"match" => match_params}, user) do
     users_match_params = merge_current_user(match_params, user)
+
     case Games.start_match(users_match_params) do
       {:ok, match} ->
         redirect(conn, to: Routes.game_path(conn, :edit, match))
@@ -27,7 +28,7 @@ defmodule LofterWeb.GameController do
     end
   end
 
-  def edit(conn, %{"id" => id}, user) do
+  def edit(conn, %{"id" => id}, _user) do
     live_render(conn, LofterWeb.GameLive,
       session: %{
         "game_id" => id

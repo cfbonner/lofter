@@ -2,9 +2,10 @@ defmodule Lofter.Repo.Migrations.CreateFriendships do
   use Ecto.Migration
 
   def change do
-    create table(:friendships, primary_key: false) do
+    create table(:friendships) do
       add :user_id, references(:user)
       add :friend_id, references(:user)
+      add :last_actioned_by, :integer
       add :status, :string
 
       timestamps()

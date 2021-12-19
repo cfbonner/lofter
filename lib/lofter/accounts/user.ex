@@ -8,7 +8,6 @@ defmodule Lofter.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-    field :friend_requestor, :integer, virtual: true
 
     many_to_many :friends, Lofter.Accounts.User,
       join_through: Friendship,
@@ -17,6 +16,9 @@ defmodule Lofter.Accounts.User do
     many_to_many :reverse_friends, Lofter.Accounts.User,
       join_through: Friendship,
       join_keys: [friend_id: :id, user_id: :id]
+
+    field :friendship, :map, virtual: true
+    field :friendship_id, :integer, virtual: true
 
     timestamps()
   end
@@ -60,7 +62,9 @@ defmodule Lofter.Accounts.User do
     |> validate_length(:password, min: 8, max: 72)
     |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
+      message: "at least one digit or punctuation character"
+    )
     |> maybe_hash_password(opts)
   end
 

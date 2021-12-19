@@ -15,7 +15,7 @@ defmodule Lofter.UsersSeeds do
   This module defines seed helpers for creating entities 
   """
 
-  @default_names ~w(
+  @user_names ~w(
     Mila Nova Kai Aaliyah Braxton Zion Maeve Mia Ivy Luca Urban Aria Aurora Kayden Eliana Hunter Amelia Amara
     Lyla Quinn Atlas Elliot Lucas Alice Parker Avery River Noelle Skylar Hayden Alaina Zoey Millie Liam
     Remi Logan Shia Molly Riley Ezra Reese Asher Jude Isla Olivia Ava Malia Jalen Luna Isabella
@@ -41,9 +41,9 @@ defmodule Lofter.UsersSeeds do
     )
   end
 
-  def seed_users(usernames \\ @default_names) do
-    Enum.map(usernames, fn name -> register_user(name) end)
+  def seed_users() do
+    Enum.map(@user_names, &register_user/1)
   end
 end
 
-Lofter.SeedUtils.seed_users()
+Lofter.UsersSeeds.seed_users

@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Only in tests, remove the complexity from the password hashing algorithm
 config :argon2_elixir, t_cost: 1, m_cost: 8
@@ -11,8 +11,9 @@ config :argon2_elixir, t_cost: 1, m_cost: 8
 config :lofter, Lofter.Repo,
   username: System.get_env("POSTGRES_USER", "postgres"),
   password: System.get_env("POSTGRES_PASSWORD", "postgres"),
-  database: "#{System.get_env("POSTGRES_DB_TEST", "lofter_test")}#{System.get_env("MIX_TEST_PARTITION")}",
-  hostname: System.get_env("POSTGRES_HOST", "localhost"),  
+  database:
+    "#{System.get_env("POSTGRES_DB_TEST", "lofter_test")}#{System.get_env("MIX_TEST_PARTITION")}",
+  hostname: System.get_env("POSTGRES_HOST", "localhost"),
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 

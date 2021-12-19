@@ -1,6 +1,7 @@
 defmodule LofterWeb.DrawerComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
+
   def render(assigns) do
     ~H"""
     <div 
