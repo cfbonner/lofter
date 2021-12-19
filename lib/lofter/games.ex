@@ -5,6 +5,8 @@ defmodule Lofter.Games do
 
   alias Lofter.Repo
   alias Lofter.Games.{Match, MatchPlayer, Hole}
+  alias Lofter.Accounts.User
+  import Ecto.Query
 
   def setup_match(%Match{} = match, attrs \\ %{}) do
     Match.settings_changeset(match, attrs)
@@ -21,6 +23,23 @@ defmodule Lofter.Games do
     Match
     |> Repo.get(id)
     |> Repo.preload(match_players: MatchPlayer.order_by_position_query())
+  end
+
+  def list_users_matches(%User{id: user_id}) do
+    users_matches_query(user_id)
+    |> Repo.all()
+  end
+
+  def list_users_matches(%User{id: user_id}, %User{id: other_user_id}) do
+    users_matches_query(user_id)
+    |> intersect(^users_matches_query(other_user_id))
+    |> Repo.all()
+  end
+
+  def users_matches_query(user_id) do
+    from(m in Match)
+    |> join(:inner, [match], match_player in MatchPlayer, on: match_player.match_id == match.id)
+    |> where([match, match_player], match_player.user_id == ^user_id)
   end
 
   def update_match(match_id, hole_id, hole_strokes) do

@@ -7,6 +7,7 @@ defmodule LofterWeb.UserLiveAuth do
         assign_new(socket, :current_user, fn ->
           current_user
         end)
+
       {:cont, socket}
     else
       {:halt, socket}

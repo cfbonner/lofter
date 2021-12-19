@@ -14,7 +14,6 @@ defmodule LofterWeb.UserFriendsLive.Index do
         _session,
         socket = %{assigns: %{current_user: current_user}}
       ) do
-
     Phoenix.PubSub.subscribe(Lofter.PubSub, @topic <> "#{socket.assigns.current_user.id}")
     friends = Lofter.Friendships.get_users_friends(socket.assigns.current_user)
     friend_requests = Lofter.Friendships.get_users_friends(socket.assigns.current_user, :pending)
@@ -89,7 +88,7 @@ defmodule LofterWeb.UserFriendsLive.Index do
     ~H"""
     <h2 class="mb-4">Friend requests</h2>
     <%= for request <- @friend_requests do %>
-      <div class="border mb-2 p-2 w-full flex justify-between">
+      <div class="w-full flex justify-between items-center w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200">
         <%= link to: Routes.user_friends_show_path(@socket, :show, request), class: "py-2 align-right" do %>
           <%= request.email %>
         <% end %>
@@ -101,7 +100,7 @@ defmodule LofterWeb.UserFriendsLive.Index do
 
     <h2 class="mb-4">Friends</h2>
     <%= for friend <- @friends do %>
-      <div class="border mb-2 p-2 w-full flex justify-between">
+      <div class="w-full flex justify-between items-center w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200">
         <%= link to: Routes.user_friends_show_path(@socket, :show, friend), class: "py-2 align-right" do %>
           <%= friend.email %>
         <% end %>

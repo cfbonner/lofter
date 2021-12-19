@@ -1,11 +1,11 @@
-<h1 class="text-xl mb-2">Clubhouse</h1>
+<h1 class="text-xl mb-2">Your games</h1>
+
 <%= for match <- @games do %>
   <%= link to: Routes.game_path(@conn, :edit, match), 
-    class: "flex w-full justify-between items-center px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300" do %>
-    <%= match.updated_at %>
-    <p class="font-bold"><%= match.inserted_at %></p>
+    class: "block w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300" do %>
+    <p class="font-bold"><%= Calendar.strftime(match.inserted_at, "%d %B %Y (%p)") %></p>
+    <p>Last updated <%= Timex.from_now(match.updated_at) %></p>
   <% end %>
 <% end %>
-<%= link "New game", 
-  to: Routes.game_path(@conn, :new), 
-  class: "button button-primary" %>
+
+<%= link "New game", to: Routes.game_path(@conn, :new), class: "button button-primary" %>

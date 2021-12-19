@@ -9,13 +9,16 @@ defmodule LofterWeb.UserFriendsLive.Show do
   alias LofterWeb.FriendshipActionsLive
 
   def mount(%{"id" => id}, _sec, socket) do
+    current_user = socket.assigns.current_user
     user = Lofter.Accounts.get_user_with_friendship!(id, socket.assigns.current_user.id)
     friendship = user.friendship || %Lofter.Friendships.Friendship{}
+    matches = Lofter.Games.list_users_matches(current_user, user)
 
     {:ok,
      socket
      |> assign(:user, user)
-     |> assign(:friendship, friendship)}
+     |> assign(:friendship, friendship)
+     |> assign(:matches, matches)}
   end
 
   def handle_event("request_friendship", %{"friend-id" => friend_id}, socket) do
@@ -75,7 +78,7 @@ defmodule LofterWeb.UserFriendsLive.Show do
 
     <%= link "Start game", to: LofterWeb.Router.Helpers.game_path(@socket, :new, friend: "id"), class: "button button-primary" %>
 
-    <h3>You and user</h3>
+    <h3>You and <%= @user.email %></h3>
 
     <div class="flex space-x-2">
       <div class="relative w-18 h-1">
@@ -85,18 +88,24 @@ defmodule LofterWeb.UserFriendsLive.Show do
       <i role="circle" class="block rounded-full bg-gray-200 w-12 h-12"></i>
     </div>
 
+    <h2 class="my-2">Your games</h2>
+
     <table>
       <tr>
         <td>Games together</td>
-        <td>Last played together</td>
       </tr>
       <tr>
-        <td>TODO: 20</td>
-        <td>TODO: 3</td>
+        <td><%= Kernel.length(@matches) %></td>
       </tr>
     </table>
 
-    <%= link "Resume", to: LofterWeb.Router.Helpers.game_path(@socket, :new, friend: "id"), class: "button button-secondary" %>
+    <%= for match <- @matches do %>
+      <%= link to: LofterWeb.Router.Helpers.game_path(@socket, :edit, match), 
+        class: "block w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300" do %>
+        <p class="font-bold"><%= Calendar.strftime(match.inserted_at, "%d %B %Y (%p)") %></p>
+        <p>Last updated <%= Timex.from_now(match.updated_at) %></p>
+      <% end %>
+    <% end %>
     """
   end
 end

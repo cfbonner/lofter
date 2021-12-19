@@ -20,9 +20,12 @@ defmodule LofterWeb.FriendshipActionsLive do
     friend_id = String.to_integer(friend_id)
 
     {:ok, friendship} =
-      Lofter.Friendships.unfriend_friendship(%User{
-        id: socket.assigns.current_user.id
-      }, %User{id: friend_id})
+      Lofter.Friendships.unfriend_friendship(
+        %User{
+          id: socket.assigns.current_user.id
+        },
+        %User{id: friend_id}
+      )
 
     {:noreply,
      socket
