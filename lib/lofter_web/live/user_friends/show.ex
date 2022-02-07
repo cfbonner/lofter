@@ -21,6 +21,10 @@ defmodule LofterWeb.UserFriendsLive.Show do
      |> assign(:matches, matches)}
   end
 
+  defp username(email) do
+    String.split(email, "@") |> List.first()
+  end
+
   def render(assigns) do
     ~H"""
     <h2><%= @user.email %></h2>
@@ -31,16 +35,20 @@ defmodule LofterWeb.UserFriendsLive.Show do
 
     <hr class="block my-4"/>
 
-    <%= link "Start game", to: LofterWeb.Router.Helpers.game_path(@socket, :new, match: %{player_ids: [@user.id]}), class: "button button-primary my-4" %>
+    <%= if @friendship && @friendship.status == :confirmed do %>
+      <%= link "Start game", to: LofterWeb.Router.Helpers.game_path(@socket, :new, match: %{player_ids: [@user.id]}), class: "button button-primary my-4" %>
+    <% end %>
 
-    <h3>You and <%= @user.email %></h3>
+    <div class="flex items-center flex-col justify-center">
+      <h3 class="font-light mb-2">You & <%= username(@user.email) %></h3>
 
-    <div class="flex space-x-2">
-      <div class="relative w-18 h-1">
-        <span role="crown" class="absolute top-1 w-full h-1 bg-yellow-300"></span>
-        <i role="circle" class="block rounded-full bg-gray-200 w-12 h-12"></i>
+      <div class="flex space-x-2 mb-4">
+        <div class="relative w-10">
+          <span role="crown" class="absolute top-2 w-full h-1 bg-yellow-300"></span>
+          <i role="circle" class="flex items-center justify-center rounded-full bg-purple-300 w-10 h-10"> <span class="font-light">. .</span></i>
+        </div>
+        <i role="circle" class="flex items-center justify-center rounded-full bg-gray-200 w-10 h-10"><span class="font-light">. .</span></i>
       </div>
-      <i role="circle" class="block rounded-full bg-gray-200 w-12 h-12"></i>
     </div>
 
     <%= if Enum.any?(@matches) do %>
