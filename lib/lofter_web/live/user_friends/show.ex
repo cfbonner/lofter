@@ -21,40 +21,6 @@ defmodule LofterWeb.UserFriendsLive.Show do
      |> assign(:matches, matches)}
   end
 
-  def handle_event("request_friendship", %{"friend-id" => friend_id}, socket) do
-    friend_id = String.to_integer(friend_id)
-
-    {:ok, friendship} =
-      Lofter.Friendships.request_friendship(%User{id: socket.assigns.current_user.id}, %User{
-        id: friend_id
-      })
-
-    {:noreply,
-     socket
-     |> assign(:friendship, friendship)}
-  end
-
-  def handle_event("accept_friendship", %{"id" => user_id}, socket) do
-    {:ok, friendship} =
-      Lofter.Friendships.confirm_friendship(%User{id: String.to_integer(user_id)}, %User{
-        id: socket.assigns.current_user.id
-      })
-
-    {:noreply,
-     socket
-     |> assign(:friendship, friendship)}
-  end
-
-  def handle_info({:remove_friend, %{friendship_id: user_id}}, socket) do
-    updated_friend_requests =
-      socket.assigns.friend_requests
-      |> Enum.reject(&(&1.friendship.id == user_id))
-
-    {:noreply,
-     socket
-     |> assign(:friend_requests, updated_friend_requests)}
-  end
-
   def render(assigns) do
     ~H"""
     <h2><%= @user.email %></h2>
@@ -62,17 +28,6 @@ defmodule LofterWeb.UserFriendsLive.Show do
     <ul>
       <%= live_component FriendshipActionsLive, current_user: @current_user, user_two: @user, friendship: @friendship, id: "friendship_actions" %>
     </ul>
-
-    <table>
-      <tr>
-        <td>Games played</td>
-        <td>Personal best</td>
-      </tr>
-      <tr>
-        <td><%= Kernel.length(@matches) %></td>
-        <td>TODO: -1</td>
-      </tr>
-    </table>
 
     <hr class="block my-4"/>
 
