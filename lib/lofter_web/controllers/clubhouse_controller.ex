@@ -1,9 +1,9 @@
 defmodule LofterWeb.ClubhouseController do
   use LofterWeb, :controller
-  alias Lofter.Clubhouse
+  alias Lofter.Games
 
   def index(conn, _, user) do
-    games = Clubhouse.all_user_matches(user)
+    games = Games.list_users_matches(user)
     render(conn, "index.html", games: games, user: user)
   end
 

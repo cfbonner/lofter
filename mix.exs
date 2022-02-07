@@ -14,7 +14,8 @@ defmodule Lofter.MixProject do
       releases: [
         lofter: [
           steps: [
-            :assemble, :tar
+            :assemble,
+            :tar
           ]
         ]
       ]
@@ -46,7 +47,7 @@ defmodule Lofter.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:esbuild, "~> 0.1", runtime: Mix.env() == :dev},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.16.0"},
+      {:phoenix_live_view, "~> 0.16.4"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -57,6 +58,8 @@ defmodule Lofter.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:timex, "~> 3.7.6"},
+      {:inflex, "~> 1.8.0"}
     ]
   end
 

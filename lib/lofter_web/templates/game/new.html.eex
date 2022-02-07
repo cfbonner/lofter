@@ -2,7 +2,6 @@
 
 <%= form_for @changeset, Routes.game_path(@conn, :create), fn f -> %>
 
-
   <%= if @changeset.action do %>
     <div class="block bg-red-100 px-2 py-2">
       <p>You've got to fix something</p>
@@ -25,33 +24,27 @@
       <% end %>
     </div>
 
-    <%= label f, :player_ids %>
+    <%= label f, :player_ids, class: "sr-only" %>
     <%= error_tag f, :player_ids %>
-    <div>
-      <%= label f, "player_ids", class: "block" do %>
-        <%= checkbox f, :player_ids, 
-                        name: "#{input_name(:match, :player_ids)}[]",
-                        checked_value: @user.id,
-                        hidden_input: false %>
-        <span class="inline-block w-6 h-6 rounded rounded-full bg-gray-900"></span>
-      <% end %>
-      <%= label f, "player_ids", class: "block" do %>
-        <%= checkbox f, :player_ids, 
-                        name: "#{input_name(:match, :player_ids)}[]",
-                        checked_value: nil,
-                        checked: false,
-                        hidden_input: false %>
-        <span class="inline-block w-6 h-6 rounded rounded-full bg-green-900"></span>
-      <% end %>
-      <%= label f, "player_ids", class: "block" do %>
-        <%= checkbox f, :player_ids, 
-                        name: "#{input_name(:match, :player_ids)}[]",
-                        checked_value: 2,
-                        hidden_input: false %>
-        <span class="inline-block w-6 h-6 rounded rounded-full bg-yellow-900">2</span>
-      <% end %>
+      <div x-data="{ open: <%= Enum.any?(@changeset.data.player_ids) %> }">
+      <a 
+        href="#" 
+        x-on:click="open = !open, $refs.checkbox.checked = false"
+      >Add additional players</a>
+      <div x-show="open" x-transition>
+        <%= for friend <- @users_friends do %>
+          <%= label class: "block text-sm text-bold" do %>
+            <%= checkbox f, :player_ids, 
+                            'x-ref': 'checkbox',
+                            name: "#{input_name(:match, :player_ids)}[]",
+                            checked_value: friend.id,
+                            checked: Enum.member?(@changeset.data.player_ids, friend.id),
+                            hidden_input: false %>
+            <%= friend.email %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
-    <a href="#">Add player</a>
 
     <%= hidden_input f, :length, value: "" %>
     <%= label f, :length %>

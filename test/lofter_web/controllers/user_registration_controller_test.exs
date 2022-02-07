@@ -35,8 +35,7 @@ defmodule LofterWeb.UserRegistrationControllerTest do
       conn = get(conn, "/")
       response = html_response(conn, 200)
       assert response =~ email
-      assert response =~ "Settings</a>"
-      assert response =~ "Log out</a>"
+      assert response =~ "logged_in_user_menu"
     end
 
     test "render errors for invalid data", %{conn: conn} do
