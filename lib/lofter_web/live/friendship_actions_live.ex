@@ -49,7 +49,7 @@ defmodule LofterWeb.FriendshipActionsLive do
     ~H"""
     <div>
       <%= if @friendship do %>
-        <h3><%= inspect @friendship.status %></h3>
+        <h3><%= @friendship.status %></h3>
       <% end %>
       <%= if @friendship && @friendship.last_actioned_by == @current_user.id do %>
         <%= case @friendship.status do %>
@@ -95,10 +95,10 @@ defmodule LofterWeb.FriendshipActionsLive do
         <% end %>
       <% end %>
       <%= if @friendship == nil do %>
-       <button phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} class="text-blue-500 hover:underline">
-         Add as a friend
-       </button>
-     <% end %>
+        <button phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} class="text-blue-500 hover:underline">
+          Add as a friend
+        </button>
+      <% end %>
     </div>
     """
   end

@@ -18,7 +18,7 @@ defmodule LofterWeb.DrawerComponent do
         class="drawer-handle"
       ><span class="text-sm">Handle</span>
       </button>
-      <div class="drawer-contents max-w-xl mx-auto">
+      <div class="drawer-contents max-w-xl mx-auto mb-8">
         <%= render_block(@inner_block, assigns) %>
       </div>
     </div>

@@ -383,8 +383,7 @@ defmodule Lofter.Accounts do
       on:
         (fs.user_id == u.id and fs.friend_id == ^user_id) or
           (fs.friend_id == u.id and fs.user_id == ^user_id),
-      select_merge: %{friendship: fs},
-      limit: 1
+      select_merge: %{friendship: fs}
   end
 
   @doc """
