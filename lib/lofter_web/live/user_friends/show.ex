@@ -88,22 +88,15 @@ defmodule LofterWeb.UserFriendsLive.Show do
       <i role="circle" class="block rounded-full bg-gray-200 w-12 h-12"></i>
     </div>
 
-    <h2 class="my-2">Your games</h2>
-
-    <table>
-      <tr>
-        <td>Games together</td>
-      </tr>
-      <tr>
-        <td><%= Kernel.length(@matches) %></td>
-      </tr>
-    </table>
+    <%= if Enum.any?(@matches) do %>
+      <p class="font-light mb-2">Your <%= Kernel.length(@matches) %> <%= Inflex.inflect("game", Kernel.length(@matches)) %> together:</p>
+    <% end %>
 
     <%= for match <- @matches do %>
       <%= link to: LofterWeb.Router.Helpers.game_path(@socket, :edit, match), 
         class: "block w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300" do %>
         <p class="font-bold"><%= Calendar.strftime(match.inserted_at, "%d %B %Y (%p)") %></p>
-        <p>Last updated <%= Timex.from_now(match.updated_at) %></p>
+        <p class="font-light">Last updated <%= Timex.from_now(match.updated_at) %></p>
       <% end %>
     <% end %>
     """
