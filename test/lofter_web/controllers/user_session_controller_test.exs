@@ -35,9 +35,7 @@ defmodule LofterWeb.UserSessionControllerTest do
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
       response = html_response(conn, 200)
-      assert response =~ user.email
-      assert response =~ "Settings</a>"
-      assert response =~ "Log out</a>"
+      assert response =~ "logged_in_user_menu"
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user} do

@@ -10,12 +10,15 @@ defmodule LofterWeb.GameController do
   end
 
   def new(conn, params, user) do
-    player_ids = 
+    player_ids =
       case params do
-        %{"match" => %{"player_ids" => player_ids }} ->
+        %{"match" => %{"player_ids" => player_ids}} ->
           Enum.map(player_ids, &String.to_integer/1)
-        _ -> []
+
+        _ ->
+          []
       end
+
     changeset = Games.setup_match(%Games.Match{player_ids: player_ids})
     users_friends = Lofter.Friendships.get_users_friends(user)
     render(conn, "new.html", changeset: changeset, user: user, users_friends: users_friends)

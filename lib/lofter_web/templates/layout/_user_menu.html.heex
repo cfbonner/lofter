@@ -1,4 +1,4 @@
-<nav>
+<nav id={ if @current_user, do: 'logged_in_user_menu', else: 'logged_out_user_menu' }>
   <ul class="flex space-x-2 justify-between w-full p-2">
     <li><%= link "Home", to: Routes.clubhouse_path(@conn, :index) %></li>
     <li class="text-right">

@@ -2,7 +2,6 @@ defmodule LofterWeb.UserFriendsLive.Index do
   use Phoenix.LiveView, layout: {LofterWeb.LayoutView, "live.html"}
   use Phoenix.HTML
 
-  alias Lofter.Accounts.User
   alias Lofter.Friendships
   alias LofterWeb.Router.Helpers, as: Routes
   alias LofterWeb.FriendshipActionsLive
@@ -12,8 +11,8 @@ defmodule LofterWeb.UserFriendsLive.Index do
         _session,
         socket = %{assigns: %{current_user: current_user}}
       ) do
-    friends = Lofter.Friendships.get_users_friends(socket.assigns.current_user)
-    friend_requests = Lofter.Friendships.get_users_friends(socket.assigns.current_user, :pending)
+    friends = Friendships.get_users_friends(current_user)
+    friend_requests = Friendships.get_users_friends(current_user, :pending)
 
     {:ok,
      socket

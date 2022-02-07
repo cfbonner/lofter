@@ -81,11 +81,6 @@ defmodule LofterWeb.Router do
     put "/user/reset_password/:token", UserResetPasswordController, :update
   end
 
-  scope "/", LofterWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-  end
-
   live_session :default, on_mount: LofterWeb.UserLiveAuth do
     scope "/" do
       pipe_through [:browser, :require_authenticated_user]
