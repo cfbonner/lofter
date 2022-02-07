@@ -69,14 +69,14 @@ defmodule LofterWeb.UserFriendsLive.Show do
         <td>Personal best</td>
       </tr>
       <tr>
-        <td>TODO: 12</td>
+        <td><%= Kernel.length(@matches) %></td>
         <td>TODO: -1</td>
       </tr>
     </table>
 
     <hr class="block my-4"/>
 
-    <%= link "Start game", to: LofterWeb.Router.Helpers.game_path(@socket, :new, friend: "id"), class: "button button-primary" %>
+    <%= link "Start game", to: LofterWeb.Router.Helpers.game_path(@socket, :new, match: %{player_ids: [@user.id]}), class: "button button-primary my-4" %>
 
     <h3>You and <%= @user.email %></h3>
 

@@ -26,10 +26,10 @@
 
     <%= label f, :player_ids, class: "sr-only" %>
     <%= error_tag f, :player_ids %>
-    <div x-data="{ open: false }">
+      <div x-data="{ open: <%= Enum.any?(@changeset.data.player_ids) %> }">
       <a 
         href="#" 
-        x-on:click="open = ! open, $refs.checkbox.checked = false"
+        x-on:click="open = !open, $refs.checkbox.checked = false"
       >Add additional players</a>
       <div x-show="open" x-transition>
         <%= for friend <- @users_friends do %>
@@ -38,6 +38,7 @@
                             'x-ref': 'checkbox',
                             name: "#{input_name(:match, :player_ids)}[]",
                             checked_value: friend.id,
+                            checked: Enum.member?(@changeset.data.player_ids, friend.id),
                             hidden_input: false %>
             <%= friend.email %>
           <% end %>
