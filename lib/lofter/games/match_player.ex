@@ -39,7 +39,7 @@ defmodule Lofter.Games.MatchPlayer do
   end
 
   def random_name do
-    Enum.random(sample_names)
+    Enum.random(sample_names())
   end
 
   def sample_names do
