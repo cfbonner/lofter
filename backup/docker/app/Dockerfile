@@ -1,4 +1,4 @@
-FROM elixir:1.9
+FROM elixir:1.13
 
 RUN apt-get update
 RUN apt-get install --yes postgresql-client
@@ -8,8 +8,8 @@ RUN apt-get install make gcc libc-dev
 RUN mix local.hex --force
 RUN mix local.rebar --force
 
-# install the latest version of Phoenix
-RUN mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force
+# # install the latest version of Phoenix
+# RUN mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force
 
 # install NodeJS and NPM
 RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
