@@ -1,28 +1,16 @@
-const defaultTheme = require("tailwindcss/defaultTheme")
 const colors = require('tailwindcss/colors')
-
 module.exports = {
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
-  },
-  mode: "jit",
-  purge: [
-    "../**/*.html.eex",
-    "../**/*.html.leex",
-    "../**/*.html.heex",
-    "../**/views/**/*.ex",
-    "../**/live/**/*.ex",
-    "./js/**/*.js"
+  content: [
+    './js/**/*.js',
+    '../lib/*_web.ex',
+    '../lib/*_web/**/*.*ex'
   ],
   theme: {
     extend: {
       colors: {
 	green: colors.emerald,
-	gray: colors.warmGray,
+	gray: colors.stone,
       }
     },
-  },
-  variants: {},
-  plugins: [],
+  }
 }

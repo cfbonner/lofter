@@ -9,10 +9,12 @@ let csrfToken = document
 let Hooks = {};
 Hooks.holes = {
   updated() {
-    window.scroll({
-      top: this.el.offsetTop - 8,
-      behavior: "smooth",
-    });
+    if (this.el.dataset.current == "true") {
+      window.scroll({
+	top: this.el.offsetTop - 8,
+	behavior: "smooth",
+      });
+    }
   },
 };
 

@@ -8,7 +8,7 @@ defmodule LofterWeb.DrawerComponent do
       x-data="{ open: false }"
       x-cloak="true"
       x-on:toggle-drawer="open = $event.detail.state"
-      class="drawer-closed"
+      class="drawer closed"
       x-bind:class="{'drawer': open == true, 'drawer closed': open == false}"
       phx-hook="DrawerToggle"
     >
@@ -18,7 +18,7 @@ defmodule LofterWeb.DrawerComponent do
         class="drawer-handle"
       ><span class="text-sm">Handle</span>
       </button>
-      <div class="drawer-contents max-w-xl mx-auto mb-8">
+      <div class="drawer-contents max-w-xl mx-auto">
         <%= render_block(@inner_block, assigns) %>
       </div>
     </div>

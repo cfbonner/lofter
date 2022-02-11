@@ -1,4 +1,4 @@
-<div class="<%= if @open do 'drawer' else 'drawer closed' end %>">
+<div class={ if @open do "drawer" else "drawer closed" end }>
    <button 
      phx-click="toggle_drawer"
      class="drawer-handle"
@@ -13,8 +13,7 @@
       <a 
         phx-click="previous_player" 
         href="#" 
-        class="text-xs font-bold"
-        >Previous player</a> | 
+        class="text-xs font-bold">Previous player</a> | 
       <a 
         phx-click="next_player" 
         href="#" 
@@ -39,12 +38,9 @@
       </div>
     </div>
     <div>
-      <%= f = form_for :hole, "#", [phx_change: :update_hole] %>
+      <.form let={f} for={:hole} phx-change="update_hole" action="#">
         <%= hidden_input f, :strokes, value: "" %>
-        <div
-          class="
-          overflow-y-scroll divide-y-2 divide-gray-200"
-        >
+        <div class="overflow-y-scroll divide-y-2 divide-gray-200">
           <%= for strokes <- (1..7) do %>
             <%= live_component(
                   @socket, 
@@ -60,7 +56,7 @@
               )
           %>
         </div>
-      </form>
+      </.form>
     </div>
   </div>
 </div>
