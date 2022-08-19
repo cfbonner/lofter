@@ -1,6 +1,7 @@
 defmodule LofterWeb.DrawerComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
+  use PetalComponents
 
   def render(assigns) do
     ~H"""
@@ -16,7 +17,9 @@ defmodule LofterWeb.DrawerComponent do
         @click="open = ! open"
         @keydown.escape.window="open = false"
         class="drawer-handle"
-      ><span class="text-sm">Handle</span>
+    >
+      <Heroicons.Solid.menu_alt_4 class="w-4 h-4 ml-1 -mr-1 text-gray-800 dark:text-gray-100" />
+      <span class="sr-only">Toggle</span>
       </button>
       <div class="drawer-contents max-w-xl mx-auto">
         <%= render_block(@inner_block, assigns) %>

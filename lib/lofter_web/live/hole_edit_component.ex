@@ -1,6 +1,7 @@
 defmodule LofterWeb.HoleEditComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
+  use PetalComponents
 end
 
 defmodule LofterWeb.StrokeOptionComponent do

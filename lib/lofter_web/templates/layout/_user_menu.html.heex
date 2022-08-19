@@ -1,20 +1,62 @@
 <nav id={ if @current_user, do: 'logged_in_user_menu', else: 'logged_out_user_menu' }>
+
   <ul class="flex space-x-2 justify-between w-full p-2">
-    <li><%= link "Home", to: Routes.clubhouse_path(@conn, :index) %></li>
-    <li class="text-right">
-      <ul>
-        <%= if @current_user do %>
-        <li><%= link @current_user.email, to: Routes.user_settings_path(@conn, :edit) %></li>
-        <li><%= link "Friends", to: Routes.user_friends_index_path(@conn, :index) %></li>
-        <li><%= link "Search", to: Routes.user_search_path(@conn, :index) %></li>
-        <hr class="w-4 my-2 ml-auto"/>
-        <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
-        <% else %>
-        <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
-        <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
-        <% end %>
-        <.color_scheme_switch />
-      </ul>
-    </li>
+    <%= if @current_user do %>
+      <.icon_button to={Routes.clubhouse_path(@conn, :index)} link_type="a" size="md" color="success" icon={:home} />
+    <% else %>
+      <.icon_button to="/" link_type="a" size="md" color="success" icon={:home} />
+    <% end %>
+    <.dropdown>
+    <:trigger_element>
+    <div class="inline-flex items-center justify-center w-full align-middle focus:outline-none">
+    <%= if @current_user do %>
+      <.avatar size="sm" />
+      <Heroicons.Solid.chevron_down class="w-4 h-4 ml-1 -mr-1 text-gray-800 dark:text-gray-100" />
+    <% else %>
+      <div class="flex">
+        <.button icon link_type="a" color="success" to="#">
+          Menu
+          <Heroicons.Solid.menu_alt_3 class="w-5 h-5" />
+        </.button>
+      </div>
+    <% end %>
+    </div>
+    </:trigger_element>
+    <%= if @current_user do %>
+      <.dropdown_menu_item link_type="a" to={Routes.user_settings_path(@conn, :edit)} >
+        <Heroicons.Outline.user class="w-5 h-5 text-gray-500" />
+        <%= @current_user.email %>
+      </.dropdown_menu_item>
+      <.dropdown_menu_item link_type="a" to={Routes.user_friends_index_path(@conn, :index)} >
+        <Heroicons.Outline.user_group class="w-5 h-5 text-gray-500" />
+        Friends
+      </.dropdown_menu_item>
+      <.dropdown_menu_item link_type="a" to={Routes.user_search_path(@conn, :index)} >
+        <Heroicons.Outline.search class="w-5 h-5 text-gray-500" />
+        Search users
+      </.dropdown_menu_item>
+      <.dropdown_menu_item link_type="a" to={Routes.user_session_path(@conn, :delete)} method="delete" >
+        <Heroicons.Outline.logout class="w-5 h-5 text-gray-500" />
+        Logout
+      </.dropdown_menu_item>
+    <% else %>
+      <.dropdown_menu_item link_type="a" to={Routes.user_session_path(@conn, :new)}>
+        <Heroicons.Outline.login class="w-5 h-5 text-gray-500" />
+        Sign in
+      </.dropdown_menu_item>
+      <.dropdown_menu_item link_type="a" to={Routes.user_registration_path(@conn, :new)}>
+        <Heroicons.Outline.sparkles class="w-5 h-5 text-gray-500" />
+        Register
+      </.dropdown_menu_item>
+      <.dropdown_menu_item 
+        x-init="window.initScheme();"
+        x-data="{ toggle: () => { window.toggleScheme(); } }"
+        @click="toggle">
+        <Heroicons.Outline.moon class="color-scheme-dark-icon hidden w-5 h-5 text-gray-500" />
+        <Heroicons.Outline.sun class="color-scheme-light-icon hidden w-5 h-5 text-gray-500" />
+        Theme toggle
+      </.dropdown_menu_item>
+    <% end %>
+    </.dropdown>
   </ul>
 </nav>

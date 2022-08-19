@@ -3,6 +3,7 @@ defmodule LofterWeb.UserFriendsLive.Show do
   LiveView for players interacting with others
   """
   use Phoenix.LiveView, layout: {LofterWeb.LayoutView, "live.html"}
+  use PetalComponents
 
   use Phoenix.HTML
   alias Lofter.Accounts.User
@@ -27,7 +28,7 @@ defmodule LofterWeb.UserFriendsLive.Show do
 
   def render(assigns) do
     ~H"""
-    <h2><%= @user.email %></h2>
+    <.h2><%= @user.email %></.h2>
 
     <ul>
       <%= live_component FriendshipActionsLive, current_user: @current_user, user_two: @user, friendship: @friendship, id: "friendship_actions" %>
