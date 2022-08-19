@@ -1,5 +1,6 @@
 defmodule LofterWeb.UserSummaryComponent do
   use Phoenix.LiveComponent
+  use PetalComponents
   use Phoenix.HTML
   alias LofterWeb.Router.Helpers, as: Routes
   alias LofterWeb.FriendshipActionsLive
@@ -9,9 +10,12 @@ defmodule LofterWeb.UserSummaryComponent do
     <div>
       <%= if @selected_user != nil do %>
         <%= link to: Routes.user_friends_show_path(@socket, :show, @selected_user), class: "py-2" do %>
-          <h2><%= @selected_user.email %></h2>
+          <div class="mb-2">
+            <.avatar size="sm"/>
+          </div>
+          <.h3><%= @selected_user.email %></.h3>
         <% end %>
-        <p>Account created <%= Timex.from_now(@selected_user.inserted_at) %></p>
+        <.p>Account created <%= Timex.from_now(@selected_user.inserted_at) %></.p>
         <div class="text-right">
           <%= live_component FriendshipActionsLive, current_user: @current_user, user_two: @selected_user, friendship: @selected_user.friendship, id: "friendship_actions" %>
         </div>
@@ -19,9 +23,11 @@ defmodule LofterWeb.UserSummaryComponent do
           <button class="mt-4 button button-primary">New game</button>
         <% end %>
         <hr class="my-4"/>
-        <%= link to: Routes.user_friends_show_path(@socket, :show, @selected_user), class: "py-2 align-right" do %>
+        <.p>
+        <.link to={Routes.user_friends_show_path(@socket, :show, @selected_user)}>
           View profile
-        <% end %>
+          </.link>
+        </.p>
       <% end %>
     </div>
     """

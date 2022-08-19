@@ -1,5 +1,5 @@
 <h1>User search</h1>
-<.form let={f} for={:search} phx-change="search" action="#">
+<.form let={f} for={:search} phx-submit="search" phx-change="search" action="#">
   <div class="input-group string">
     <%= label f, :query, "Search", class: "sr-only" %>
     <%= text_input f, :query, [autofocus: true, phx_debounce: 250] %>
@@ -23,9 +23,13 @@
       >
         <p class="font-bold"><%= result.email %></p>
         <%= if result.friendship do %>
-          <p class="text-xs font-bold">
-            <%= result.friendship.status %> since <%= result.friendship.updated_at %>
-          </p>
+          <%= case result.friendship.status do %>
+            <% :pending -> %>
+            <.badge color="warning" label="Pending" />
+            <% :confirmed -> %>
+              <.badge color="success" label="Friends" />
+            <% _ -> %> 
+          <% end %>
         <% end %>
       </a>
     </li>

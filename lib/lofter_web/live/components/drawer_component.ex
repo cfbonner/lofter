@@ -8,12 +8,12 @@ defmodule LofterWeb.DrawerComponent do
       x-data="{ open: false }"
       x-cloak="true"
       x-on:toggle-drawer="open = $event.detail.state"
-      class="drawer closed"
+      class="drawer closed dark:bg-gray-600"
       x-bind:class="{'drawer': open == true, 'drawer closed': open == false}"
       phx-hook="DrawerToggle"
     >
       <button 
-        @click="open = !open"
+        @click="open = ! open"
         @keydown.escape.window="open = false"
         class="drawer-handle"
       ><span class="text-sm">Handle</span>

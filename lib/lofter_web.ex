@@ -87,6 +87,14 @@ defmodule LofterWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
+      # Import global components
+       import LofterWeb.Components.{
+        ColorSchemeSwitch
+      }
+
+      # Tools to help you rapidly build Phoenix web applications without worrying about design or reinventing the wheel. 
+      use PetalComponents
+
       import LofterWeb.ErrorHelpers
       import LofterWeb.Gettext
       alias LofterWeb.Router.Helpers, as: Routes

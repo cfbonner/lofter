@@ -1,5 +1,6 @@
 defmodule LofterWeb.FriendshipActionsLive do
   use Phoenix.LiveComponent
+  use PetalComponents
   alias Lofter.Accounts.User
   alias Lofter.Friendships
 
@@ -45,59 +46,73 @@ defmodule LofterWeb.FriendshipActionsLive do
      |> assign(:friendship, friendship)}
   end
 
+  def badge_date(date) do
+    Calendar.strftime(date, "%d %B %Y")
+
+  end
+
   def render(assigns) do
     ~H"""
     <div>
       <%= if @friendship do %>
-        <h3><%= @friendship.status %></h3>
+        <div class="mb-2">
+          <%= case @friendship.status do %>
+            <% :pending -> %>
+            <.badge color="warning" label={"Pending since " <> badge_date(@friendship.updated_at)} />
+            <% :confirmed -> %>
+              <.badge color="success" label={"Friends since " <> badge_date(@friendship.updated_at)}/>
+            <% _ -> %> 
+          <% end %>
+        </div>
       <% end %>
       <%= if @friendship && @friendship.last_actioned_by == @current_user.id do %>
         <%= case @friendship.status do %>
           <% :pending -> %>
-            <button phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id} class="text-red-700 hover:underline">
+            <.button icon link_type="a" color="danger" to="#" phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id} >
+              <Heroicons.Solid.user_remove class="w-5 h-5" />
               Undo friend request
-            </button>
+            </.button>
           <% :confirmed -> %>
-            <button phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id} class="text-red-500 hover:underline">
+            <.button icon link_type="a" color="danger" to="#" phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id} >
+              <Heroicons.Solid.user_remove class="w-5 h-5" />
               Remove from friends
-            </button>
-          <% :unfriended -> %>
-            <button phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} class="text-blue-500 hover:underline">
-              Add as a friend
-            </button>
+            </.button>
           <% _ -> %>
-            <button phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} class="text-blue-100 hover:underline">
+            <.button icon link_type="a" color="success" to="#" phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} >
+              <Heroicons.Solid.user_add class="w-5 h-5" />
               Add as a friend
-            </button>
+            </.button>
         <% end %>
       <% end %>
       <%= if @friendship && @friendship.last_actioned_by != @current_user.id do %>
         <%= case @friendship.status do %>
           <% :pending -> %>
-            <button phx-target={@myself} phx-click="accept" phx-value-friend-id={@user_two.id} class="text-green-700 hover:underline">
-              Accept 
-            </button>
-            <button phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id} class="text-red-700 hover:underline">
+          <div class="flex flex-wrap space-x-2">
+            <.button icon link_type="button" color="success" phx-target={@myself} phx-click="accept" phx-value-friend-id={@user_two.id}>
+              <Heroicons.Solid.user_add class="w-5 h-5" />
+              Accept friend request
+            </.button>
+            <.button icon link_type="button" color="danger" phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id}>
+              <Heroicons.Solid.user_remove class="w-5 h-5" />
               Reject
-            </button>
+            </.button>
+            </div>
           <% :confirmed -> %>
-            <button phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id} class="text-red-500 hover:underline">
+            <.button icon link_type="button" color="danger" phx-target={@myself} phx-click="remove" phx-value-friend-id={@user_two.id}>
+              <Heroicons.Solid.user_remove class="w-5 h-5" />
               Remove from friends
-            </button>
-          <% :unfriended -> %>
-            <button phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} class="text-blue-500 hover:underline">
-              Add as a friend
-            </button>
+            </.button>
           <% _ -> %>
-            <button phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} class="text-blue-500 hover:underline">
+            <.button icon link_type="button" color="success" phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id}>
               Add as a friend
-            </button>
+            </.button>
         <% end %>
       <% end %>
       <%= if @friendship == nil do %>
-        <button phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id} class="text-blue-500 hover:underline">
+        <.button icon link_type="button" color="success" phx-target={@myself} phx-click="request" phx-value-friend-id={@user_two.id}>
+          <Heroicons.Solid.user_add class="w-5 h-5" />
           Add as a friend
-        </button>
+        </.button>
       <% end %>
     </div>
     """

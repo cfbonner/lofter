@@ -5,6 +5,7 @@ defmodule LofterWeb.UserSearchLive do
 
   use Phoenix.LiveView, layout: {LofterWeb.LayoutView, "live.html"}
   use Phoenix.HTML
+  use PetalComponents
 
   def mount(_params, _session, socket) do
     {:ok,
