@@ -8,10 +8,8 @@
       <a 
         href="#" 
         phx-click="set_player"
-        phx-value-match-player-id="<%= player.id %>"
-        class="block w-full bg-gray-300 text-center hover:bg-gray-400 
-        <%= if player.id == @match_player.id do 'bg-gray-600 text-white hover:bg-gray-600' end %>"
-      >
+        phx-value-match-player-id={player.id}
+        class={"block w-full bg-gray-300 text-center hover:bg-gray-400 #{if player.id == @match_player.id, do: "bg-gray-600 text-white hover:bg-gray-600" }"}>
         <%= player.name %>
       </a>
     <% end %>
@@ -22,14 +20,15 @@
   <%= for hole <- @match_player.holes do %>
     <a 
       href="#" 
-      id="<%= hole.id %>"
+      id={to_string(hole.id)}
       phx-click="set_current"
       phx-hook="holes"
-      phx-value-hole-id="<%= hole.id %>"
-      <%= if hole.id == @current.id do %>data-current="true"<% end %>
-      class="<%= if hole.strokes > 0 do 'bg-green-100' end %>  
-        <%= if hole.id == @current.id do 'border-transparent ring-1 ring-gray-400' end %>  
-        flex w-full justify-between items-center px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"
+      phx-value-hole-id={hole.id}
+      data-current={if hole.id == @current.id, do: "true"}
+      class={"
+        #{if hole.strokes > 0, do: "bg-green-100"}  
+        #{if hole.id == @current.id, do: "border-transparent ring-1 ring-gray-400"}
+        flex w-full justify-between items-center px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"}
     >
       <div>
         <p class="font-bold">Hole <%= hole.position %></p>
