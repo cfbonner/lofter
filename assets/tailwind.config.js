@@ -12,6 +12,7 @@ module.exports = {
       colors: {
 	green: colors.emerald,
 	gray: colors.stone,
+	primary: colors.green,
       }
     },
   }
