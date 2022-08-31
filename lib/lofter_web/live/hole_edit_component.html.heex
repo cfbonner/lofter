@@ -9,18 +9,21 @@
 
   <div class="drawer-contents max-w-xl mx-auto">
     <div class="flex items-end justify-between">
-      <h3 class="text-md font-bold"><%= @match_player.name %></h3>
-      <div>
-      <a 
-        phx-click="previous_player" 
-        href="#" 
-        class="text-xs font-bold">Previous player</a> | 
-      <a 
-        phx-click="next_player" 
-        href="#" 
-        class="text-xs font-bold"
-        >Next player</a>
-      </div>
+      <%= if @multiple_players do %>
+        <h3 class="flex items-center space-x-3 text-md font-bold text-gray-900 dark:text-gray-300"><Heroicons.Solid.user class="w-5 h-5" /><%= @match_player.name %></h3>
+        
+        <div>
+        <a 
+          phx-click="previous_player" 
+          href="#" 
+          class="text-xs font-bold">Previous player</a> | 
+        <a 
+          phx-click="next_player" 
+          href="#" 
+          class="text-xs font-bold"
+          >Next player</a>
+        </div>
+      <% end %>
     </div>
 
     <div class="flex items-end justify-between">
@@ -41,7 +44,7 @@
     <div>
       <.form let={f} for={:hole} phx-change="update_hole" action="#">
         <%= hidden_input f, :strokes, value: "" %>
-        <div class="overflow-y-scroll divide-y-2 divide-gray-200">
+        <div class="overflow-y-scroll flex flex-wrap mt-2">
           <%= for strokes <- (1..7) do %>
             <%= live_component(
                   @socket, 

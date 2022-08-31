@@ -1,15 +1,20 @@
-<h1>Forgot your password?</h1>
+<h1 class="header-medium" data-test="reset-password-page-header">Forgot your password?</h1>
 
 <.form let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}>
-  <p class="mb-2">Enter your email, and we'll send you instructions for resetting your forgotten password.</p>
-  <div class="input-group string">
-    <%= label f, :email %>
-    <%= email_input f, :email, required: true %>
-  </div>
+  <p class="mb-4">Enter your email, and we'll send you instructions for resetting your forgotten password.</p>
 
-  <div>
-    <%= submit "Send instructions", class: 'button button-primary' %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="email_input"
+    form={f}
+    field={:email}
+  />
+
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Send instructions</.button>
 </.form>
 
 <p class="text-right">

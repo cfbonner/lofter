@@ -5,6 +5,8 @@ defmodule LofterWeb.UserFriendsLive.Show do
   use Phoenix.LiveView, layout: {LofterWeb.LayoutView, "live.html"}
   use PetalComponents
 
+  use LofterWeb.Components
+
   use Phoenix.HTML
   alias Lofter.Accounts.User
   alias LofterWeb.FriendshipActionsLive
@@ -57,11 +59,14 @@ defmodule LofterWeb.UserFriendsLive.Show do
     <% end %>
 
     <%= for match <- @matches do %>
-      <%= link to: LofterWeb.Router.Helpers.game_path(@socket, :edit, match), 
-        class: "block w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300" do %>
-        <p class="font-bold"><%= Calendar.strftime(match.inserted_at, "%d %B %Y (%p)") %></p>
-        <p class="font-light">Last updated <%= Timex.from_now(match.updated_at) %></p>
-      <% end %>
+      <.tile to={LofterWeb.Router.Helpers.game_path(@socket, :edit, match)}>
+        <.tile_title>
+          <%= Calendar.strftime(match.inserted_at, "%d %B %Y (%p)") %>
+        </.tile_title>
+        <.tile_body>
+          Last updated <%= Timex.from_now(match.updated_at) %>
+        </.tile_body>
+      </.tile>
     <% end %>
     """
   end

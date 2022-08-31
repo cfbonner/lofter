@@ -1,7 +1,8 @@
 defmodule LofterWeb.MatchPlayerEditComponent do
   use Phoenix.LiveComponent
+  use PetalComponents
 
-  def handle_event("update_name", %{"value" => name}, socket) do
+  def handle_event("update_name", %{"match_player" => %{"name" => name}}, socket) do
     match_player = socket.assigns.match_player
     Lofter.Games.update_match_player(match_player, %{name: name})
 

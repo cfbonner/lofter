@@ -1,14 +1,18 @@
-<h1>Resend confirmation instructions</h1>
+<h1 class="header-medium" data-test="resend-user-confirmation-page-header">Resend confirmation instructions</h1>
 
 <.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create)}>
-  <div class="input-group string">
-    <%= label f, :email %>
-    <%= email_input f, :email, required: true %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="email_input"
+    form={f}
+    field={:email}
+  />
 
-  <div>
-    <%= submit "Resend confirmation instructions", class: "button button-primary" %>
-  </div>
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Resend confirmation instructions</.button>
 </.form>
 
 <p>

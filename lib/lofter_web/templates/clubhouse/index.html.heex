@@ -1,0 +1,104 @@
+<h1 class="sr-only">Dashboard</h1>
+
+<h2 class="header-small">Your games</h2>
+
+<%= if Enum.empty?(@games) do %>
+  <.alert
+    color="success"
+    class="mb-2"
+    close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}      
+    >
+    <p class="text-sm mb-1">Welcome <%= @user.email %></p>
+    <p class="text-xs">Once you start a game you can always return to it here. You don't have any games started yet. </p>
+  </.alert>
+<% end %>
+
+<%= for match <- @games do %>
+  <.tile to={Routes.game_path(@conn, :edit, match)}>
+    <.tile_title>
+      <div class="flex justify-between items-start">
+        <span class="font-bold mr-2"><%= Calendar.strftime(match.inserted_at, "%d %B %Y (%p)") %></span>
+      <Heroicons.Solid.globe_alt class="w-8 h-8 ml-1 -mr-1 text-gray-300 dark:text-gray-100" />
+      </div>
+    </.tile_title>
+    <.tile_body>
+    <.badge color="success" label={"#{Timex.from_now(match.updated_at)}"} />
+    </.tile_body>
+  </.tile>
+<% end %>
+
+<.button icon link_type="a" color="success" to={Routes.game_path(@conn, :new)} size="lg" class="w-full">
+  <Heroicons.Solid.plus class="w-5 h-5" />
+  New game
+</.button>
+
+<br class="mb-4"/>
+
+<h2 class="header-small">Your friends</h2>
+
+<%= if Enum.empty?(@friends) do %>
+  <.alert
+    color="info"
+    class="mb-2"
+    close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}      
+    >
+    <p class="text-sm mb-1">Find the others</p>
+    <p class="text-xs">Your friends can join each other's games. You can even make new friends here.</p>
+  </.alert>
+<% end %>
+
+<%= for friend <- @friends do %>
+  <.tile to={Routes.user_friends_show_path(@conn, :show, friend)}>
+    <.tile_title>
+      <div class="flex justify-between items-start">
+        <span class="font-bold mr-2"><%= friend.email %></span>
+        <.avatar size="sm"/>
+      </div>
+    </.tile_title>
+    <.tile_body>
+      <%= case friend.friendship.status do %>
+        <% :pending -> %>
+        <.badge color="info" label="Pending" />
+        <% _ -> %> 
+      <% end %>
+    </.tile_body>
+  </.tile>
+<% end %>
+
+<%= for friend <- @pending_friends do %>
+  <.tile to={Routes.user_friends_show_path(@conn, :show, friend)}>
+    <.tile_title>
+      <div class="flex justify-between items-start">
+        <span class="font-bold mr-2"><%= friend.email %></span>
+        <.avatar size="sm"/>
+      </div>
+    </.tile_title>
+    <.tile_body>
+      <%= case friend.friendship.status do %>
+        <% :pending -> %>
+        <.badge color="info" label="Pending" />
+        <% _ -> %> 
+      <% end %>
+    </.tile_body>
+  </.tile>
+<% end %>
+
+<.button icon link_type="a" color="info" to={Routes.user_search_path(@conn, :index)} size="lg" class="w-full">
+  <Heroicons.Solid.search class="w-5 h-5" />
+  Search users
+</.button>
+
+<br class="mb-8"/>
+
+<.alert
+  color="warning"
+  class="mb-2"
+  >
+  <p class="text-sm mb-1">Manage your account</p>
+  <p class="text-xs">Update your account details and settings here.</p>
+</.alert>
+
+<.button icon link_type="a" color="warning" to={Routes.user_settings_path(@conn, :edit)} size="lg" class="w-full">
+  <Heroicons.Solid.cog class="w-5 h-5" />
+  Settings
+</.button>

@@ -94,6 +94,7 @@ defmodule LofterWeb do
 
       # Tools to help you rapidly build Phoenix web applications without worrying about design or reinventing the wheel. 
       use PetalComponents
+      use LofterWeb.Components
 
       import LofterWeb.ErrorHelpers
       import LofterWeb.Gettext

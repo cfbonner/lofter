@@ -1,11 +1,15 @@
-<form action="#">
-  <label for="match_player[name]">Edit name:</label>
-  <input 
-    phx-blur="update_name"
-    phx-target={ @myself }
-    type="text" 
-    name="match_player[name]" 
-    value={ @match_player.name }
-    class="inline-block mb-2"
-   />
-</form>
+<div>
+  <.accordion class="w-full rounded-b" icon={:chevron_down}>
+    <:item heading="Settings" class="px-2 py-2">
+      <div class="mb-2">
+        <.form let={f} for={:match_player} phx-submit="update_name" phx-target={ @myself } action="#">
+          <.form_label form={f} field={:name} />
+          <div class="flex">
+            <.text_input form={f} field={:name} value={@match_player.name} class="" /> 
+            <.button color="success">Save</.button>
+          </div>
+        </.form>
+      </div>
+    </:item>
+  </.accordion>
+</div>
