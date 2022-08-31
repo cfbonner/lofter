@@ -1,27 +1,36 @@
-<h1>Register</h1>
+<h1 class="header-medium" data-test="registration-page-header">Register</h1>
 
 <.form let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
   <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
+    <.alert
+      with_icon
+      color="danger"
+      class="mb-2"
+      close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}      
+      >
+    Oops, something went wrong! Please check the errors below.
+    </.alert>
   <% end %>
 
-  <div class="input-group string">
-    <%= label f, :email %>
-    <%= email_input f, :email, required: true %>
-    <%= error_tag f, :email %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="email_input"
+    form={f}
+    field={:email}
+  />
 
-  <div class="input-group string">
-    <%= label f, :password %>
-    <%= password_input f, :password, required: true %>
-    <%= error_tag f, :password %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="password_input"
+    form={f}
+    field={:password}
+  />
 
-  <div class="mb-2">
-    <%= submit "Register", class: "button button-primary" %>
-  </div>
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Register</.button>
 </.form>
 
 <p class="text-right">Already have an account? <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %></p>

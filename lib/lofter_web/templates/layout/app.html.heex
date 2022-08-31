@@ -1,0 +1,24 @@
+<main role="main">
+  <.container max_width="md">
+    <%= if info = get_flash(@conn, :info) do %>
+      <.alert
+        with_icon
+        close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}
+        color="info"
+        class="mb-2"
+        label={info}
+      />
+    <% end %>
+
+    <%= if error = get_flash(@conn, :error) do %>
+      <.alert
+        with_icon
+        close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}
+        color="danger"
+        class="mb-2"
+        label={error}
+        />
+    <% end %>
+    <%= @inner_content %>
+  </.container>
+</main>

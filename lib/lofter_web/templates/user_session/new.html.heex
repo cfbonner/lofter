@@ -1,30 +1,44 @@
-<h1>Log in</h1>
+<%= if @error_message do %>
+  <.alert
+    with_icon
+    color="danger"
+    class="mb-2"
+    close_button_properties={["@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}
+  >
+    <%= @error_message %>
+  </.alert>
+<% end %>
+
+<h1 class="header-medium" data-test="session-page-header">Log in</h1>
 
 <.form let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
-  <%= if @error_message do %>
-    <div class="alert alert-danger">
-      <p><%= @error_message %></p>
-    </div>
-  <% end %>
+  <.form_field
+    class="px-2 py-2"
+    type="email_input"
+    form={f}
+    field={:email}
+  />
 
-  <div class="input-group string">
-    <%= label f, :email %>
-    <%= email_input f, :email, required: true %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="password_input"
+    form={f}
+    field={:password}
+  />
 
-  <div class="input-group string">
-    <%= label f, :password %>
-    <%= password_input f, :password, required: true %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="checkbox"
+    form={f}
+    label="Keep me logged in for 60 days"
+    field={:remember_me}
+  />
 
-  <div class="input-group boolean">
-    <%= checkbox f, :remember_me %>
-    <%= label f, :remember_me, "Keep me logged in for 60 days" %>
-  </div>
-
-  <div class="mb-2">
-    <%= submit "Log in", class: "button button-primary" %>
-  </div>
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Log in</.button>
 </.form>
 
 <p class="text-right">Don't have an account? <%= link "Register", to: Routes.user_registration_path(@conn, :new), class: "font-bold text-gray-900 hover:underline" %></p>

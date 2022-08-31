@@ -1,9 +1,11 @@
-<h1>Confirm account</h1>
+<h1 class="header-medium" data-test="user-confirmation-page-header">Confirm account</h1>
 
 <.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)}>
-  <div>
-    <%= submit "Confirm my account", class: "button button-primary" %>
-  </div>
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Confirm my account</.button>
 </.form>
 
 <p>

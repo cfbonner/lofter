@@ -4,6 +4,8 @@ defmodule LofterWeb.GameLive do
   """
 
   use Phoenix.LiveView
+  use PetalComponents
+  use LofterWeb.Components
 
   @topic "match"
 

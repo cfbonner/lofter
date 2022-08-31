@@ -1,0 +1,78 @@
+<h1 class="header-medium">New game</h1>
+
+<%= form_for @changeset, Routes.game_path(@conn, :create), fn f -> %>
+
+  <%= if @changeset.action do %>
+    <div class="block bg-red-100 px-2 py-2">
+      <p>You've got to fix something</p>
+    </div>
+  <% end %>
+
+  <div class="mb-4">
+    <.form_label form={f} field={:course} />
+    <div class="flex flex-row flex-wrap gap-4">
+      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
+        <.radio form={f} field={:course} value="bruntsfield" />
+        <div>Bruntsfield</div>
+      </label>
+
+      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
+        <.radio form={f} field={:course} value="leith" />
+        <div>Leith</div>
+      </label>
+    </div>
+    <.form_field_error form={f} field={:course} class="mt-1" />
+  </div>
+
+  <div class="mb-4">
+    <.form_label form={f} field={:length} />
+    <div class="flex flex-row gap-4">
+      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
+        <.radio form={f} field={:length} value="36" />
+        <div>36</div>
+      </label>
+
+      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
+        <.radio form={f} field={:length} value="18" />
+        <div>18</div>
+      </label>
+
+      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
+        <.radio form={f} field={:length} value="9" />
+        <div>9</div>
+      </label>
+    </div>
+    <.form_field_error form={f} field={:length} class="mt-1" />
+  </div>
+
+  <%= if length(@users_friends) > 0 do %>
+    <%= label f, :player_ids, class: "sr-only" %>
+    <.form_field_error form={f} field={:player_ids} class="mt-1" />
+    <div x-data="{ open: #{ Enum.any?(@changeset.data.player_ids) } }">
+      <a 
+        href="#" 
+        x-on:click="open = !open, $refs.checkbox.checked = false"
+      >Add additional players</a>
+      <div x-show="open" x-transition>
+        <%= for friend <- @users_friends do %>
+          <%= label class: "block text-sm text-bold" do %>
+            <%= checkbox f, :player_ids, 
+                            'x-ref': 'checkbox',
+                            name: "#{input_name(:match, :player_ids)}[]",
+                            checked_value: friend.id,
+                            checked: Enum.member?(@changeset.data.player_ids, friend.id),
+                            hidden_input: false %>
+            <%= friend.email %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Start game</.button>
+
+<% end %>

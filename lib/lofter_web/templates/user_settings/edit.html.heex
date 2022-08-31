@@ -1,63 +1,86 @@
-<h1>Settings</h1>
+<h1 class="header-medium">Settings</h1>
 
-<h2>Change email</h2>
+<h2 class="header-small">Change email</h2>
 
 <.form let={f} for={@email_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_email" class="mb-4">
   <%= if @email_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
+    <.alert
+      with_icon
+      close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}
+      color="danger"
+      class="mb-2"
+      >
+    Oops, something went wrong! Please check the errors below.
+    </.alert>
   <% end %>
 
   <%= hidden_input f, :action, name: "action", value: "update_email" %>
 
-  <div class="input-group string">
-    <%= label f, :email %>
-    <%= email_input f, :email, required: true %>
-    <%= error_tag f, :email %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="email_input"
+    form={f}
+    field={:email}
+  />
 
-  <div class="input-group string">
-    <%= label f, :current_password, for: "current_password_for_email" %>
-    <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email" %>
-    <%= error_tag f, :current_password %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="password_input"
+    form={f}
+    field={:current_password}
+    label_opts={%{for: "current_password_for_email"}}
+    input_opts={%{name: "current_password", class: "px-2 py-2", id: "current_password_for_email"}}
+  />
 
-  <div>
-    <%= submit "Change email", class: "button" %>
-  </div>
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Change email</.button>
+
 </.form>
 
-<h2>Change password</h2>
+<h2 class="header-small">Change password</h2>
 
-<.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password" class = "mb-4">
+<.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password" class="mb-4">
   <%= if @password_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
+    <.alert
+      with_icon
+      color="danger"
+      class="mb-2"
+      close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}
+      >
+    Oops, something went wrong! Please check the errors below.
+    </.alert>
   <% end %>
 
   <%= hidden_input f, :action, name: "action", value: "update_password" %>
 
-  <div class="input-group string">
-    <%= label f, :password, "New password" %>
-    <%= password_input f, :password, required: true %>
-    <%= error_tag f, :password %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="password_input"
+    form={f}
+    field={:password}
+  />
 
-  <div class="input-group string">
-    <%= label f, :password_confirmation, "Confirm new password" %>
-    <%= password_input f, :password_confirmation, required: true %>
-    <%= error_tag f, :password_confirmation %>
-  </div>
+  <.form_field
+    class="px-2 py-2"
+    type="password_input"
+    form={f}
+    field={:password_confirmation}
+  />
 
-  <div class="input-group string">
-    <%= label f, :current_password, for: "current_password_for_password" %>
-    <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password" %>
-    <%= error_tag f, :current_password %>
-  </div>
+  <.form_field
+    type="password_input"
+    form={f}
+    field={:current_password}
+    input_opts={%{name: "current_password", class: "px-2 py-2", id: "current_password_for_password"}}
+  />
 
-  <div>
-    <%= submit "Change password", class: "button" %>
-  </div>
+  <.button
+    link_type="button"
+    class="w-full mb-4"
+    color="primary"
+  >Change password</.button>
+
 </.form>

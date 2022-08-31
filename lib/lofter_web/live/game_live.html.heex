@@ -1,25 +1,27 @@
 <h1 class="sr-only">Play game</h1>
 
 <section>
-  <div
-    class="divide-x-0 divide-gray-100 flex mb-2"
-    >
+
+  <.tabs class="mb-4 flex flex-wrap">
     <%= for player <- @match.match_players do %>
-      <a 
-        href="#" 
+      <.tab 
+        underline
+        to="#"
+        link_type="button"
+        is_active={player.id == @match_player.id}
         phx-click="set_player"
-        phx-value-match-player-id={player.id}
-        class={"block w-full bg-gray-300 text-center hover:bg-gray-400 #{if player.id == @match_player.id, do: "bg-gray-600 text-white hover:bg-gray-600" }"}>
+        phx-value-match-player-id={player.id}>
+        <Heroicons.Outline.user class="w-5 h-5 mr-2" />
         <%= player.name %>
-      </a>
+      </.tab>
     <% end %>
-  </div>
+  </.tabs>
 
   <%= live_component @socket, LofterWeb.MatchPlayerEditComponent, id: "match_player_edit", match_player: @match_player, match_id: @match.id %>
 
   <%= for hole <- @match_player.holes do %>
-    <a 
-      href="#" 
+    <.tile 
+      to="#"
       id={to_string(hole.id)}
       phx-click="set_current"
       phx-hook="holes"
@@ -29,7 +31,7 @@
         #{if hole.strokes > 0, do: "bg-green-100"}  
         #{if hole.id == @current.id, do: "border-transparent ring-1 ring-gray-400"}
         flex w-full justify-between items-center px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"}
-    >
+        >
       <div>
         <p class="font-bold">Hole <%= hole.position %></p>
         <p>Par <strong class="font-bold"><%= hole.par %></strong></p>
@@ -39,7 +41,8 @@
       <% else %>
         <p class="w-8 h-8 border rounded border-gray-500"><span class="sr-only"><%= hole.strokes %></span></p>
       <% end %>
-    </a>
+    </.tile>
+
   <% end %>
     <a 
       href="#" 
@@ -54,5 +57,5 @@
     </a>
 </section>
 
-<%= live_component @socket, LofterWeb.HoleEditComponent, id: "hole_edit", match: @match, match_player: @match_player, current: @current, open: @open %>
+<%= live_component @socket, LofterWeb.HoleEditComponent, id: "hole_edit", match: @match, multiple_players: length(@match.match_players) > 1, match_player: @match_player, current: @current, open: @open %>
 <div id="buffer" class="h-screen"></div>

@@ -23,7 +23,7 @@ defmodule LofterWeb.UserFriendsLive.Index do
 
   def render(assigns) do
     ~H"""
-    <h2 class="mb-4">Friend requests</h2>
+    <h2 class="header-small mb-4">Pending friends</h2>
     <%= for request <- @friend_requests do %>
       <div class="w-full flex flex-wrap justify-between items-center w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200">
         <%= link to: Routes.user_friends_show_path(@socket, :show, request), class: "py-2 align-right" do %>
@@ -35,9 +35,9 @@ defmodule LofterWeb.UserFriendsLive.Index do
       </div>
     <% end %>
 
-    <h2 class="mb-4">Friends</h2>
+    <h2 class="header-small mb-4">Friends</h2>
     <%= for friend <- @friends do %>
-      <div class="w-full flex flex-wrap justify-between items-center w-full px-2 py-1 mb-2 rounded bg-gray-100 border border-gray-200">
+      <div class="w-full flex flex-wrap justify-between items-center w-full px-2 py-1 mb-2 rounded bg-green-100 border border-gray-200">
         <%= link to: Routes.user_friends_show_path(@socket, :show, friend), class: "py-2 align-right" do %>
           <%= friend.email %>
         <% end %>

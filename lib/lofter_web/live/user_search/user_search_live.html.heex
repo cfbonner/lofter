@@ -1,8 +1,16 @@
-<h1>User search</h1>
+<h1 class="header-medium" data-test="user-search-page-header">Search for other players</h1>
 <.form let={f} for={:search} phx-submit="search" phx-change="search" action="#">
   <div class="input-group string">
-    <%= label f, :query, "Search", class: "sr-only" %>
-    <%= text_input f, :query, [autofocus: true, phx_debounce: 250] %>
+    <.form_label form={f} field={:query} label="Search" />
+
+    <.search_input
+      class="px-2 py-2"
+      form={f}
+      field={:query}
+      autofocus={true}
+      phx-debounce={250}
+    />
+
     <div class="flex justify-end">
       <%= if @query != "" do %>
         <%= link("Clear", to: "#", phx_click: :clear, class: 'text-sm') %>
@@ -19,9 +27,12 @@
         phx-value-user_id={result.id}
         href="#" 
         class="
-          flex w-full justify-between items-center px-2 py-4 mb-2 rounded bg-gray-100 border border-gray-200 hover:border-gray-300"
+          flex w-full justify-between items-center px-2 py-4 mb-2 rounded bg-slate-100 border border-slate-200 hover:border-slate-300 md:px-4 dark:bg-slate-600"
       >
-        <p class="font-bold"><%= result.email %></p>
+        <div class="flex items-center space-x-2">
+          <.avatar size="sm"/>
+          <p class="font-bold dark:text-slate-50"><%= result.email %></p>
+        </div>
         <%= if result.friendship do %>
           <%= case result.friendship.status do %>
             <% :pending -> %>

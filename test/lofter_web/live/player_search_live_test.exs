@@ -7,6 +7,6 @@ defmodule LofterWeb.PlayerSearchLiveTest do
 
   test "disconnected and connected render", %{conn: conn} do
     {:ok, _page_live, disconnected_html} = live(conn, "/user/search")
-    assert disconnected_html =~ "User search"
+    assert disconnected_html =~ "data-test=\"user-search-page-header\""
   end
 end

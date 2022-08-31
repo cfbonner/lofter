@@ -1,6 +1,5 @@
 <nav id={ if @current_user, do: 'logged_in_user_menu', else: 'logged_out_user_menu' }>
-
-  <ul class="flex space-x-2 justify-between w-full p-2">
+  <ul class="flex space-x-2 justify-between w-full py-2">
     <%= if @current_user do %>
       <.icon_button to={Routes.clubhouse_path(@conn, :index)} link_type="a" size="md" color="success" icon={:home} />
     <% else %>
@@ -44,10 +43,12 @@
         <Heroicons.Outline.login class="w-5 h-5 text-gray-500" />
         Sign in
       </.dropdown_menu_item>
-      <.dropdown_menu_item link_type="a" to={Routes.user_registration_path(@conn, :new)}>
+      <.dropdown_menu_item link_type="a" data-test="registration-link" to={Routes.user_registration_path(@conn, :new)}>
         <Heroicons.Outline.sparkles class="w-5 h-5 text-gray-500" />
         Register
       </.dropdown_menu_item>
+    <% end %>
+    
       <.dropdown_menu_item 
         x-init="window.initScheme();"
         x-data="{ toggle: () => { window.toggleScheme(); } }"
@@ -56,7 +57,6 @@
         <Heroicons.Outline.sun class="color-scheme-light-icon hidden w-5 h-5 text-gray-500" />
         Theme toggle
       </.dropdown_menu_item>
-    <% end %>
     </.dropdown>
   </ul>
 </nav>

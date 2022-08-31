@@ -1,1 +1,19 @@
- 
+.header-medium {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: .5em;
+} 
+
+.dark .header-medium {
+  @apply text-gray-300;
+} 
+
+.header-small {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: .5em;
+} 
+
+.dark .header-small {
+  @apply text-gray-300;
+} 
