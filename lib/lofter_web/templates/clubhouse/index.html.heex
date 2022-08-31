@@ -32,9 +32,7 @@
   New game
 </.button>
 
-<br class="mb-4"/>
-
-<h2 class="header-small">Your friends</h2>
+<h2 class="header-small mt-4">Your friends</h2>
 
 <%= if Enum.empty?(@friends) do %>
   <.alert
@@ -88,11 +86,9 @@
   Search users
 </.button>
 
-<br class="mb-8"/>
-
 <.alert
   color="warning"
-  class="mb-2"
+  class="block mt-4 mb-2"
   >
   <p class="text-sm mb-1">Manage your account</p>
   <p class="text-xs">Update your account details and settings here.</p>
