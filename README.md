@@ -14,7 +14,7 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## Deploying
 ```
-git push heroku main
+fly deploy
 ```
 ## Learn more
 
