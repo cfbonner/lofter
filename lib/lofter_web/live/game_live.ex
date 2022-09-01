@@ -9,7 +9,7 @@ defmodule LofterWeb.GameLive do
 
   @topic "match"
 
-  def mount(_params, %{"game_id" => match_id}, socket) do
+  def mount(_params, %{"game_id" => match_id, "user" => user}, socket) do
     Phoenix.PubSub.subscribe(Lofter.PubSub, "#{@topic}:#{match_id}")
 
     match = Lofter.Games.get_match!(match_id)
@@ -18,6 +18,7 @@ defmodule LofterWeb.GameLive do
 
     {:ok,
      socket
+     |> assign(:user, user)
      |> assign(:match, match)
      |> assign(:match_player, match_player)
      |> assign(:match_player_index, 0)

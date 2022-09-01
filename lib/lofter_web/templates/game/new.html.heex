@@ -3,44 +3,37 @@
 <%= form_for @changeset, Routes.game_path(@conn, :create), fn f -> %>
 
   <%= if @changeset.action do %>
-    <div class="block bg-red-100 px-2 py-2">
-      <p>You've got to fix something</p>
-    </div>
+      <.alert
+        with_icon
+        close_button_properties={["x-init": "() => null", "@click": "() => $el.parentNode.parentNode.parentNode.remove()"]}
+        color="danger"
+        class="mb-4"
+        >
+        <p>You've got to fix something</p>
+      </.alert>
   <% end %>
 
-  <div class="mb-4">
+  <div class="hidden">
     <.form_label form={f} field={:course} />
-    <div class="flex flex-row flex-wrap gap-4">
-      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
+      <label>
         <.radio form={f} field={:course} value="bruntsfield" />
         <div>Bruntsfield</div>
       </label>
-
-      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
-        <.radio form={f} field={:course} value="leith" />
-        <div>Leith</div>
-      </label>
-    </div>
     <.form_field_error form={f} field={:course} class="mt-1" />
   </div>
 
-  <div class="mb-4">
-    <.form_label form={f} field={:length} />
-    <div class="flex flex-row gap-4">
-      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
-        <.radio form={f} field={:length} value="36" />
-        <div>36</div>
+  <div x-data="{ xlength: ''}" class="mb-4">
+    <% length_opts = ['36', '18', '9'] %>
+    <div class="flex flex-row space-x-2">
+      <%= for length_opt <- length_opts do %>
+        <label x-data="{xselected: false}" class="cursor-pointer flex justify-center items-center rounded w-1/3 h-16 gap-2 text-sm text-gray-900 transition-shadow" :class={"xlength == #{length_opt} ? 'bg-green-100 dark:bg-primary-200 shadow-sm' : 'bg-white dark:bg-slate-500 shadow'"}>
+          <.radio form={f} field={:length} value={length_opt} x-model="xlength" class="hidden" />
+        <p>
+          <span class="label-medium text-grey-300 dark:text-slate-900"><%= length_opt %></span>
+          <span class="text-[9px] md:text-[12px] font-bold text-grey-300 dark:text-slate-900">holes</span>
+        </p>
       </label>
-
-      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
-        <.radio form={f} field={:length} value="18" />
-        <div>18</div>
-      </label>
-
-      <label class="inline-flex items-center gap-2 text-sm text-gray-900 dark:text-gray-200">
-        <.radio form={f} field={:length} value="9" />
-        <div>9</div>
-      </label>
+      <% end %>
     </div>
     <.form_field_error form={f} field={:length} class="mt-1" />
   </div>
@@ -48,21 +41,26 @@
   <%= if length(@users_friends) > 0 do %>
     <%= label f, :player_ids, class: "sr-only" %>
     <.form_field_error form={f} field={:player_ids} class="mt-1" />
-    <div x-data="{ open: #{ Enum.any?(@changeset.data.player_ids) } }">
-      <a 
-        href="#" 
-        x-on:click="open = !open, $refs.checkbox.checked = false"
-      >Add additional players</a>
+    <div class="space-y-2 mb-8" x-data={"{open: #{ is_list(@changeset.data.player_ids) && Enum.any?(@changeset.data.player_ids) }}"}>
+      <div class="text-right">
+      <.button icon link_type="a" to="#" color="info" x-on:click="open = !open, $refs.checkbox.checked = false">
+        <Heroicons.Solid.user_add class="w-5 h-5" />
+        Add additional players
+      </.button>
+      </div>
       <div x-show="open" x-transition>
         <%= for friend <- @users_friends do %>
-          <%= label class: "block text-sm text-bold" do %>
-            <%= checkbox f, :player_ids, 
-                            'x-ref': 'checkbox',
-                            name: "#{input_name(:match, :player_ids)}[]",
-                            checked_value: friend.id,
-                            checked: Enum.member?(@changeset.data.player_ids, friend.id),
-                            hidden_input: false %>
-            <%= friend.email %>
+          <%= checkbox f, :player_ids, 
+                          'x-ref': 'checkbox',
+                          name: "#{input_name(:match, :player_ids)}[]",
+                          checked_value: friend.id,
+                          checked: (is_list(@changeset.data.player_ids) && Enum.member?(@changeset.data.player_ids, friend.id)),
+                          class: "peer hidden",
+                          id: "player-#{friend.id}",
+                          hidden_input: false %>
+          <%= label for: "player-#{friend.id}", class: "relative cursor-pointer flex items-center rounded w-full p-4 text-base text-gray-900 dark:text-slate-900 dark:bg-slate-500 transition-shadow shadow peer-checked:bg-primary-100 peer-checked:bg-primary-200" do %>
+            <span class="text-sm font-bold z-10"><%= friend.email %></span>
+            <Heroicons.Solid.user class="absolute right-4 w-6 h-6 text-gray-200"/>
           <% end %>
         <% end %>
       </div>
@@ -71,8 +69,59 @@
 
   <.button
     link_type="button"
-    class="w-full mb-4"
+    class="w-full mb-8"
     color="primary"
+    size="xl"
   >Start game</.button>
 
 <% end %>
+<div class="bg-white shadow rounded-lg p-5 dark:bg-gray-800 w-full mb-4"
+     x-data="
+       {
+         weatherData: null,
+         fetchWeatherData() {
+           fetch('https://api.weatherapi.com/v1/forecast.json?key=ff9b41622f994b1287a73535210809&q=Edinburgh&days=3')
+             .then(response => response.json())
+             .then(json => this.weatherData = json)
+         },
+         formattedDateDisplay(date) {
+            const options = {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+           };
+           
+           return (new Date(date)).toLocaleDateString('en-US', options);
+        }
+  }"
+  x-init="setTimeout(function() { fetchWeatherData() }, 2000)"
+  x-cloak>
+  <div class="flex justify-between relative">
+    <h2 class="font-bold text-gray-800 text-lg dark:text-gray-400 z-20" x-text="formattedDateDisplay(new Date())"></h2>
+    <Heroicons.Solid.globe class="absolute right-0 w-8 h-8 text-gray-200 z-10"/>
+  </div>
+    <template x-if="weatherData != null">
+      <div>
+        <div class="flex mt-4 mb-2">
+          <div class="flex-1">
+            <div class="text-gray-600 text-sm dark:text-gray-400 mb-2">Brunstfield Links, Edinburgh</div>
+            <div class="text-3xl font-bold text-gray-800 dark:text-gray-300" x-html="`${weatherData.current.temp_c} &deg;C`"></div>
+            <div x-text="weatherData.current.condition.text" class="text-xs text-gray-600 dark:text-gray-400"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template x-if="weatherData == null">
+      <div>
+        <div class="flex mt-4 mb-2 items-start">
+          <div class="flex-1">
+            <div class="text-gray-600 text-sm dark:text-gray-400 mb-2">Brunstfield Links, Edinburgh</div>
+            <div class="rounded h-4"></div>
+            <div class="rounded h-2 mt-1.5 bg-gray-200 w-1/2"></div>
+          </div>
+        </div>
+      </div>
+  </template>
+</div>

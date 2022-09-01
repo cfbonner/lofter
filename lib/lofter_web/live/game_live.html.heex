@@ -10,9 +10,14 @@
         link_type="button"
         is_active={player.id == @match_player.id}
         phx-click="set_player"
-        phx-value-match-player-id={player.id}>
+        phx-value-match-player-id={player.id}
+        class="relative"
+        >
         <Heroicons.Outline.user class="w-5 h-5 mr-2" />
         <%= player.name %>
+        <%= if @user.id == player.user.id do %>
+          <Heroicons.Solid.flag class="text-green-600 ml-2 w-3 h-3" />
+        <% end %>
       </.tab>
     <% end %>
   </.tabs>

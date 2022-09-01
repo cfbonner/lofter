@@ -3,9 +3,10 @@
     <:item heading="Settings" class="px-2 py-2">
       <div class="mb-2">
         <.form let={f} for={:match_player} phx-submit="update_name" phx-target={ @myself } action="#">
-          <.form_label form={f} field={:name} />
-          <div class="flex">
-            <.text_input form={f} field={:name} value={@match_player.name} class="" /> 
+          <p class="text-base font-bold mb-2 dark:text-white"><%= @match_player.user.email %></p>
+            <.form_label form={f} field={:name} classes="text-xs font-bold mb-0 mr-2 dark:text-white">Nickname</.form_label>
+          <div class="flex items-end">
+            <.text_input form={f} field={:name} value={@match_player.name} /> 
             <.button color="success">Save</.button>
           </div>
         </.form>

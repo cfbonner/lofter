@@ -34,8 +34,12 @@ defmodule Lofter.Games.MatchPlayer do
 
   def order_by_position_query do
     from mp in __MODULE__,
+      join: user in assoc(mp, :user),
       order_by: mp.position,
-      preload: [holes: ^Lofter.Games.Hole.order_by_position_query()]
+      preload: [
+        holes: ^Lofter.Games.Hole.order_by_position_query(),
+        user: user
+      ]
   end
 
   def random_name do

@@ -19,7 +19,7 @@ defmodule LofterWeb.GameController do
           []
       end
 
-    changeset = Games.setup_match(%Games.Match{player_ids: player_ids}, %{course: "bruntsfield", length: 36})
+    changeset = Games.setup_match(%Games.Match{player_ids: player_ids}, %{course: "bruntsfield", length: '36'})
     users_friends = Lofter.Friendships.get_users_friends(user)
     render(conn, "new.html", changeset: changeset, user: user, users_friends: users_friends)
   end
@@ -37,10 +37,11 @@ defmodule LofterWeb.GameController do
     end
   end
 
-  def edit(conn, %{"id" => id}, _user) do
+  def edit(conn, %{"id" => id}, user) do
     live_render(conn, LofterWeb.GameLive,
       session: %{
-        "game_id" => id
+        "game_id" => id,
+        "user" => user
       }
     )
   end

@@ -1,4 +1,4 @@
-<div class={ if @open do "drawer" else "drawer closed" end }>
+<div class={"dark:bg-slate-700 #{ if @open do "drawer" else "drawer closed" end }"}>
    <button 
      phx-click="toggle_drawer"
      class="drawer-handle"
